@@ -3,6 +3,7 @@ main: net.devsong.slimit.SLimit
 version: 2.1
 author: Devsong
 load: STARTUP
+description: 区域限制生物生成
 commands:
   slimit:
     description: SLimit插件命令
