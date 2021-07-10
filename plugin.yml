@@ -1,0 +1,81 @@
+name: SLimit
+main: net.devsong.slimit.SLimit
+version: 2.1
+author: Devsong
+load: STARTUP
+commands:
+  slimit:
+    description: SLimit插件命令
+    usage: /slimit
+    permission: slimit.notop
+    permission-message: 你没有权限这么做
+  slimit reload:
+    description: 重新加载 SLimit配置文件
+    usage: /slimit reload
+    permission: slimit.op
+    permission-message: 你没有权限这么做
+  slimit set:
+    description: 设置一个区域
+    usage: /slimit set <NAME>
+    permission: slimit.op
+    permission-message: 你没有权限这么做
+  slimit save:
+    description: 保存已更改的区域
+    usage: /slimit save
+    permission: slimit.op
+    permission-message: 你没有权限这么做
+  slimit cancel:
+    description: 取消本次新建区域
+    usage: /slimit cancel
+    permission: slimit.op
+    permission-message: 你没有权限这么做
+  slimit list:
+    description: 查看已保存的区域
+    usage: /slimit list
+    permission: slimit.notop
+    permission-message: 你没有权限这么做
+  slimit detail:
+    description: 查看某个区域的详情
+    usage: /slimit detail <NAME>
+    permission: slimit.notop
+    permission-message: 你没有权限这么做
+  slimit remove:
+    description: 删除某个区域
+    usage: /slimit remove <NAME>
+    permission: slimit.op
+    permission-message: 你没有权限这么做
+  slimit setMonSpeed:
+    description: 设置单个区域怪物生成速度
+    usage: /slimit setMonSpeed <NAME> <SPEED>
+    permission: slimit.op
+    permission-message: 你没有权限这么做
+  slimit setALLMonSpeed:
+    description: 设置所有区域怪物生成速度
+    usage: /slimit setALLMonSpeed <SPEED>
+    permission: slimit.op
+    permission-message: 你没有权限这么做
+  slimit setAniSpeed:
+    description: 设置单个区域动物生成速度
+    usage: /slimit setAniSpeed <NAME> <SPEED>
+    permission: slimit.op
+    permission-message: 你没有权限这么做
+  slimit setALLAniSpeed:
+    description: 设置所有区域动物生成速度
+    usage: /slimit setALLAniSpeed <SPEED>
+    permission: slimit.op
+    permission-message: 你没有权限这么做
+  slimit setter:
+    description: 设置划定区域的物品
+    usage: /slimit setter
+    permission: slimit.op
+    permission-message: 你没有权限这么做
+  slimit help:
+    description: 查看SLimit插件使用说明
+    usage: /slimit help
+    permission: slimit.notop
+    permission-message: 你没有权限这么做
+permissions:
+  slimit.op:
+    default: op
+  slimit.notop:
+    default: true
