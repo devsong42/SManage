@@ -163,12 +163,14 @@ public class RegionDB {
 			for (Region region : Regions) {
 				APoint = region.getALocation();
 				BPoint = region.getBLocation();
+				if (APoint == null || BPoint == null)
+					continue;
 				if ((APoint.getX() <= location.getX() && location.getX() <= BPoint.getX())
 						|| APoint.getX() >= location.getX() && location.getX() >= BPoint.getX())
 					if (APoint.getY() - location.getY() <= 2 || BPoint.getY() - location.getY() <= 2)
 						if ((APoint.getZ() <= location.getZ() && location.getZ() <= BPoint.getZ())
 								|| APoint.getZ() >= location.getZ() && location.getZ() >= BPoint.getZ())
-							if (location.getWorld().getName().equals(APoint.getWorld().getName())) {
+							if (Objects.requireNonNull(location.getWorld()).getName().equals(Objects.requireNonNull(APoint.getWorld()).getName())) {
 								i1 = flag ? region.getMonSpeed() : region.getAniSpeed();
 								i.add(i1.get(0));
 								i.add(i1.get(1));
@@ -181,51 +183,28 @@ public class RegionDB {
 	}
 
 	private static String getWorld(Location location) {
-		String world;
-		switch (Objects.requireNonNull(location.getWorld()).getName()) {
-		case "world_the_end":
-			world = "末影之地";
-			break;
-		case "world_nether":
-			world = "下界地狱";
-			break;
-		default:
-			world = "主世界";
-			break;
-		}
-		return world;
+		return switch (Objects.requireNonNull(location.getWorld()).getName()) {
+			case "world" -> "主世界";
+			case "world_the_end" -> "末影之地";
+			case "world_nether" -> "下界地狱";
+			default -> location.getWorld().getName();
+		};
 	}
 
 	private static String getMonSpeed(int i) {
-		String MonSpeed;
-		switch (i) {
-		case 0:
-			MonSpeed = "暂不限制";
-			break;
-		case 1:
-			MonSpeed = "永不生成";
-			break;
-		default:
-			MonSpeed = "原速度的1/" + i;
-			break;
-		}
-		return MonSpeed;
+		return switch (i) {
+			case 0 -> "暂不限制";
+			case 1 -> "永不生成";
+			default -> "原速度的1/" + i;
+		};
 	}
 
 	private static String getAniSpeed(int i) {
-		String AniSpeed;
-		switch (i) {
-		case 0:
-			AniSpeed = "暂不限制";
-			break;
-		case 1:
-			AniSpeed = "永不生成";
-			break;
-		default:
-			AniSpeed = "原速度的1/" + i;
-			break;
-		}
-		return AniSpeed;
+		return switch (i) {
+			case 0 -> "暂不限制";
+			case 1 -> "永不生成";
+			default -> "原速度的1/" + i;
+		};
 	}
 
 	private static String getTime() {

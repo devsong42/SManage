@@ -10,7 +10,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.devsong.slimit.listener.LimitListener;
@@ -24,7 +23,7 @@ public class SLimit extends JavaPlugin {
 		ArrayList<Region> list = (ArrayList<Region>) getConfig().getList("RegionList");
 		String m = getConfig().getString("Setter", "APPLE");
 		RegionDB.Load(Objects.requireNonNullElseGet(list, ArrayList::new), Material.getMaterial(m), this);
-		getCommand("slimit").setExecutor(this);
+		Objects.requireNonNull(getCommand("slimit")).setExecutor(this);
 		Bukkit.getPluginManager().registerEvents(new LimitListener(getLogger()), this);
 		super.onEnable();
 	}

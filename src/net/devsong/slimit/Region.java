@@ -67,17 +67,11 @@ public class Region implements ConfigurationSerializable {
 	}
 
 	public Location getALocation() {
-		if (ALocation != null)
-			return ALocation;
-		else
-			return null;
+		return ALocation;
 	}
 
 	public Location getBLocation() {
-		if (BLocation != null)
-			return BLocation;
-		else
-			return null;
+		return BLocation;
 	}
 
 	public Map<String, Object> serialize() {

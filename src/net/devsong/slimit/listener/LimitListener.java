@@ -96,7 +96,7 @@ public class LimitListener implements Listener {
 				+ pos.getWorld().getName());
 	}
 
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	public void onEntitySpawnEvent(EntitySpawnEvent event) {
 		Entity entity = event.getEntity();
 		List<Integer> Speed;
