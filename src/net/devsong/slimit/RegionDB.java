@@ -38,18 +38,22 @@ public class RegionDB {
 		return null;
 	}
 
-	public static void set(Region region, String player, String name) {
+	public static boolean set(Region region, String player, String name) {
 		Region re = getRegion(name);
+		boolean flag;
 		if (re == null) {
 			Regions.add(region);
 			region.setModifier(player);
 			region.setModifyTime(getTime());
+			flag = true;
 		} else {
 			re.setModifier(player);
 			re.setModifyTime(getTime());
+			flag = false;
 		}
 		javaPlugin.getConfig().set("RegionList", Regions);
 		javaPlugin.saveConfig();
+		return flag;
 	}
 
 	public static boolean remove(String name) {

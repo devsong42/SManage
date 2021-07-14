@@ -20,9 +20,11 @@ public class SLimit extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		ConfigurationSerialization.registerClass(Region.class);
-		ArrayList<Region> list = (ArrayList<Region>) getConfig().getList("RegionList");
-		String m = getConfig().getString("Setter", "APPLE");
-		RegionDB.Load(Objects.requireNonNullElseGet(list, ArrayList::new), Material.getMaterial(m), this);
+		try {
+			ArrayList<Region> list = (ArrayList<Region>) getConfig().getList("RegionList");
+			String m = getConfig().getString("Setter", "APPLE");
+			RegionDB.Load(Objects.requireNonNullElseGet(list, ArrayList::new), Material.getMaterial(m), this);
+		} catch (IllegalAccessError ignored){}
 		Objects.requireNonNull(getCommand("slimit")).setExecutor(this);
 		Bukkit.getPluginManager().registerEvents(new LimitListener(getLogger()), this);
 		super.onEnable();
@@ -44,20 +46,13 @@ public class SLimit extends JavaPlugin {
 			} else if (args[0].trim().equalsIgnoreCase("set")) {
 				if (args.length != 1 && !args[1].trim().equals("")) {
 					if (regions.get(sender.getName()) == null) {
-						if (RegionDB.getRegion(args[1].trim()) != null) {
-							regions.put(sender.getName(), RegionDB.getRegion(args[1].trim()));
-							sender.sendMessage(ChatColor.YELLOW + "找到该区域，加载完成，请开始划定区域");
-							getLogger()
-									.info("玩家" + sender.getName() + "修改区域:" + regions.get(sender.getName()).getName());
-						} else {
-							Date now = new Date();
-							SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-							String dateStr = sdf.format(now);
-							regions.put(sender.getName(), new Region(args[1].trim(), sender.getName(), dateStr));
-							sender.sendMessage(ChatColor.YELLOW + "未找到该区域，新建完成，请开始划定区域");
-							getLogger()
-									.info("玩家" + sender.getName() + "新建区域:" + regions.get(sender.getName()).getName());
-						}
+						Date now = new Date();
+						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+						String dateStr = sdf.format(now);
+						regions.put(sender.getName(), new Region(args[1].trim(), sender.getName(), dateStr));
+						sender.sendMessage(ChatColor.YELLOW + "请开始划定区域");
+						getLogger()
+								.info("玩家" + sender.getName() + "设置区域:" + regions.get(sender.getName()).getName());
 					} else
 						sender.sendMessage(ChatColor.RED + "目前有正在进行的区域划定任务，如要继续设置，请先save或cancel当前的任务！");
 				} else
@@ -67,8 +62,10 @@ public class SLimit extends JavaPlugin {
 				if (regions.get(sender.getName()) != null) {
 					if (regions.get(sender.getName()).getALocation() != null
 							&& regions.get(sender.getName()).getBLocation() != null) {
-						RegionDB.set(regions.get(sender.getName()), sender.getName(), regions.get(sender.getName()).getName());
-						sender.sendMessage(ChatColor.YELLOW + "保存完毕！");
+						if (RegionDB.set(regions.get(sender.getName()), sender.getName(), regions.get(sender.getName()).getName()))
+							sender.sendMessage(ChatColor.YELLOW + "保存新的区域完毕！");
+						else
+							sender.sendMessage(ChatColor.YELLOW + "重设区域完毕！");
 						regions.remove(sender.getName());
 					} else
 						sender.sendMessage(ChatColor.RED + "请设置A或B点！");
@@ -190,7 +187,7 @@ public class SLimit extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED + "请输入要查看的区域名称！");
 				return true;
 			} else if (args[0].trim().equalsIgnoreCase("setter")) {
-				Material m =((Player) sender).getItemInHand().getType();
+				Material m = ((Player) sender).getItemInHand().getType();
 				LimitListener.item = m;
 				RegionDB.setSetter(m);
 				sender.sendMessage(ChatColor.YELLOW + "设置完成! ");
@@ -213,8 +210,8 @@ public class SLimit extends JavaPlugin {
 						+ "\n注: 1. 末影龙、凋零、老守卫者 不受限制; 2. [NAME]为区域名, [NUMBER]为一个数字");
 				return true;
 			}
+			sender.sendMessage(ChatColor.RED + "未知指令! ");
 		}
-		sender.sendMessage(ChatColor.RED + "位置指令! ");
 		return true;
 	}
 }

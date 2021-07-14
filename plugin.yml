@@ -1,6 +1,6 @@
 name: SLimit
 main: net.devsong.slimit.SLimit
-version: 2.2
+version: 2.3
 author: Devsong
 load: STARTUP
 description: 区域限制生物生成
