@@ -1,4 +1,4 @@
-package net.devsong.slimit;
+package net.devsong.smanage;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -7,16 +7,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.bukkit.Location;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 public class Region implements ConfigurationSerializable {
 	private final String name;
 	private final String player;
 	private final String time;
+	private boolean mode = true;
 	private String modifier;
 	private String modifyTime;
-	private Location ALocation, BLocation;
+	private SLocation ALocation, BLocation;
 	private List<Integer> MonSpeed = Arrays.asList(1, 3);
 	private List<Integer> AniSpeed = Arrays.asList(1, 3);
 
@@ -38,6 +38,15 @@ public class Region implements ConfigurationSerializable {
 		return time;
 	}
 
+	public boolean getMode() {
+		return mode;
+	}
+
+	public Region setMode(boolean mode) {
+		this.mode = mode;
+		return this;
+	}
+
 	public List<Integer> getMonSpeed() {
 		return this.MonSpeed;
 	}
@@ -56,21 +65,21 @@ public class Region implements ConfigurationSerializable {
 		return this;
 	}
 
-	public Region setALocation(Location location) {
+	public Region setALocation(SLocation location) {
 		this.ALocation = location;
 		return this;
 	}
 
-	public Region setBLocation(Location location) {
+	public Region setBLocation(SLocation location) {
 		this.BLocation = location;
 		return this;
 	}
 
-	public Location getALocation() {
+	public SLocation getALocation() {
 		return ALocation;
 	}
 
-	public Location getBLocation() {
+	public SLocation getBLocation() {
 		return BLocation;
 	}
 
@@ -79,6 +88,7 @@ public class Region implements ConfigurationSerializable {
 		data.put("name", this.name);
 		data.put("player", this.player);
 		data.put("time", this.time);
+		data.put("mode", this.mode);
 		data.put("modifier", this.modifier);
 		data.put("modifyTime", this.modifyTime);
 		data.put("MonSpeed", this.MonSpeed);
@@ -92,9 +102,9 @@ public class Region implements ConfigurationSerializable {
 		Date now = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		String dateStr = sdf.format(now);
-		return new Region((String) args.get("name"), (String) args.get("player"), dateStr)
+		return new Region((String) args.get("name"), (String) args.get("player"), dateStr).setMode((Boolean) args.get("mode"))
 				.setMonSpeed((List<Integer>) args.get("MonSpeed")).setAniSpeed((List<Integer>) args.get("AniSpeed"))
-				.setALocation((Location) args.get("ALocation")).setBLocation((Location) args.get("BLocation"))
+				.setALocation((SLocation) args.get("ALocation")).setBLocation((SLocation) args.get("BLocation"))
 				.setModifier((String) args.get("modifier")).setModifyTime((String) args.get("modifyTime"));
 	}
 

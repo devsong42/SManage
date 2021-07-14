@@ -1,84 +1,94 @@
-name: SLimit
-main: net.devsong.slimit.SLimit
-version: 2.3
+name: SManage
+main: net.devsong.smanage.SManage
+version: 3.0
 author: Devsong
 load: STARTUP
 description: 区域限制生物生成
 commands:
-  slimit:
-    description: SLimit插件命令
-    usage: /slimit
-    permission: slimit.read
+  smanage:
+    description: SManage插件命令
+    usage: /smanage
+    permission: smanage.read
     permission-message: 你没有权限这么做
-  slimit reload:
-    description: 重新加载 SLimit配置文件
-    usage: /slimit reload
-    permission: slimit.edit
+  smanage reload:
+    description: 重新加载SManage配置文件
+    usage: /smanage reload
+    permission: smanage.edit
     permission-message: 你没有权限这么做
-  slimit set:
+  smanage set:
     description: 设置一个区域
-    usage: /slimit set <NAME>
-    permission: slimit.edit
+    usage: /smanage set <NAME>
+    permission: smanage.edit
     permission-message: 你没有权限这么做
-  slimit save:
+  smanage save:
     description: 保存已更改的区域
-    usage: /slimit save
-    permission: slimit.edit
+    usage: /smanage save
+    permission: smanage.edit
     permission-message: 你没有权限这么做
-  slimit cancel:
+  smanage cancel:
     description: 取消本次新建/修改区域
-    usage: /slimit cancel
-    permission: slimit.edit
+    usage: /smanage cancel
+    permission: smanage.edit
     permission-message: 你没有权限这么做
-  slimit list:
+  smanage list:
     description: 查看已保存的区域
-    usage: /slimit list
-    permission: slimit.read
+    usage: /smanage list
+    permission: smanage.read
     permission-message: 你没有权限这么做
-  slimit detail:
+  smanage detail:
     description: 查看某个区域的详情
-    usage: /slimit detail <NAME>
-    permission: slimit.read
+    usage: /smanage detail <NAME>
+    permission: smanage.read
     permission-message: 你没有权限这么做
-  slimit remove:
+  smanage remove:
     description: 删除某个区域
-    usage: /slimit remove <NAME>
-    permission: slimit.edit
+    usage: /smanage remove <NAME>
+    permission: smanage.edit
     permission-message: 你没有权限这么做
-  slimit setMonSpeed:
+  smanage setMonSpeed:
     description: 设置单个区域怪物生成速度
-    usage: /slimit setMonSpeed <NAME> <NUMBER>
-    permission: slimit.edit
+    usage: /smanage setMonSpeed <NAME> <NUMBER>
+    permission: smanage.edit
     permission-message: 你没有权限这么做
-  slimit setALLMonSpeed:
+  smanage setALLMonSpeed:
     description: 设置所有区域怪物生成速度
-    usage: /slimit setALLMonSpeed <NUMBER>
-    permission: slimit.edit
+    usage: /smanage setALLMonSpeed <NUMBER>
+    permission: smanage.edit
     permission-message: 你没有权限这么做
-  slimit setAniSpeed:
+  smanage setAniSpeed:
     description: 设置单个区域动物生成速度
-    usage: /slimit setAniSpeed <NAME> <NUMBER>
-    permission: slimit.edit
+    usage: /smanage setAniSpeed <NAME> <NUMBER>
+    permission: smanage.edit
     permission-message: 你没有权限这么做
-  slimit setALLAniSpeed:
+  smanage setALLAniSpeed:
     description: 设置所有区域动物生成速度
-    usage: /slimit setALLAniSpeed <NUMBER>
-    permission: slimit.edit
+    usage: /smanage setALLAniSpeed <NUMBER>
+    permission: smanage.edit
     permission-message: 你没有权限这么做
-  slimit setter:
+  smanage setter:
     description: 设置划定区域的物品
-    usage: /slimit setter
-    permission: slimit.edit
+    usage: /smanage setter
+    permission: smanage.edit
     permission-message: 你没有权限这么做
-  slimit help:
+  smanage setMode:
+    description: 设置某个区域的管理模式
+    usage: /smanage setMode [NAME] [L / A]
+    permission: smanage.edit
+    permission-message: 你没有权限这么做
+  smanage setALLMode:
+    description: 设置所有区域的管理模式
+    usage: /smanage setMode [L / A]
+    permission: smanage.edit
+    permission-message: 你没有权限这么做
+  smanage help:
     description: 查看SLimit插件使用说明
-    usage: /slimit help
-    permission: slimit.read
+    usage: /smanage help
+    permission: smanage.read
     permission-message: 你没有权限这么做
 permissions:
-  slimit.edit:
+  smanage.edit:
     description: 编辑区域所需的权限
     default: op
-  slimit.read:
+  smanage.read:
     description: 查看区域相关信息所需的权限
     default: true

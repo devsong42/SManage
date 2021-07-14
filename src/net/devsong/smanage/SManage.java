@@ -1,4 +1,4 @@
-package net.devsong.slimit;
+package net.devsong.smanage;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -12,20 +12,19 @@ import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import net.devsong.slimit.listener.LimitListener;
+import net.devsong.smanage.listener.LimitListener;
 
-public class SLimit extends JavaPlugin {
+public class SManage extends JavaPlugin {
 	public static HashMap<String, Region> regions = new HashMap<>();
 
 	@Override
 	public void onEnable() {
 		ConfigurationSerialization.registerClass(Region.class);
-		try {
-			ArrayList<Region> list = (ArrayList<Region>) getConfig().getList("RegionList");
-			String m = getConfig().getString("Setter", "APPLE");
-			RegionDB.Load(Objects.requireNonNullElseGet(list, ArrayList::new), Material.getMaterial(m), this);
-		} catch (IllegalAccessError ignored){}
-		Objects.requireNonNull(getCommand("slimit")).setExecutor(this);
+		ConfigurationSerialization.registerClass(SLocation.class);
+		ArrayList<Region> list = (ArrayList<Region>) getConfig().getList("RegionList");
+		String m = getConfig().getString("Setter", "APPLE");
+		RegionDB.Load(Objects.requireNonNullElseGet(list, ArrayList::new), Material.getMaterial(m), this);
+		Objects.requireNonNull(getCommand("smanage")).setExecutor(this);
 		Bukkit.getPluginManager().registerEvents(new LimitListener(getLogger()), this);
 		super.onEnable();
 	}
@@ -91,7 +90,7 @@ public class SLimit extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED + "请输入要删除的区域名称！");
 				return true;
 			} else if (args[0].trim().equalsIgnoreCase("setMonSpeed")) {
-				if (args.length != 1 && !args[1].trim().equals("") && args[2] != null && !args[2].trim().equals("")) {
+				if (args.length == 3 && !args[1].trim().equals("") && !args[2].trim().equals("")) {
 					Integer MonSpeed = null;
 					try {
 						MonSpeed = Integer.parseInt(args[2].trim());
@@ -111,7 +110,7 @@ public class SLimit extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED + "请输入要设置的区域名称或速度！");
 				return true;
 			} else if (args[0].trim().equalsIgnoreCase("setALLMonSpeed")) {
-				if (args[1] != null && !args[1].trim().equals("")) {
+				if (args.length == 2 && !args[1].trim().equals("")) {
 					Integer MonSpeed = null;
 					try {
 						MonSpeed = Integer.parseInt(args[1].trim());
@@ -129,7 +128,7 @@ public class SLimit extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED + "请输入要设置的速度！");
 				return true;
 			} else if (args[0].trim().equalsIgnoreCase("setAniSpeed")) {
-				if (args.length != 1 && !args[1].trim().equals("") && args[2] != null && !args[2].trim().equals("")) {
+				if (args.length == 3 && !args[1].trim().equals("") && !args[2].trim().equals("")) {
 					Integer AniSpeed = null;
 					try {
 						AniSpeed = Integer.parseInt(args[2].trim());
@@ -149,7 +148,7 @@ public class SLimit extends JavaPlugin {
 					sender.sendMessage(ChatColor.RED + "请输入要设置的区域名称或速度！");
 				return true;
 			} else if (args[0].trim().equalsIgnoreCase("setALLAniSpeed")) {
-				if (args[1] != null && !args[1].trim().equals("")) {
+				if (args.length == 2 && !args[1].trim().equals("")) {
 					Integer AniSpeed = null;
 					try {
 						AniSpeed = Integer.parseInt(args[1].trim());
@@ -191,6 +190,34 @@ public class SLimit extends JavaPlugin {
 				LimitListener.item = m;
 				RegionDB.setSetter(m);
 				sender.sendMessage(ChatColor.YELLOW + "设置完成! ");
+				return true;
+			} else if (args[0].trim().equalsIgnoreCase("setMode")) {
+				if (args.length == 3 && !args[1].trim().equals("") && !args[2].trim().equals("")) {
+						if (args[2].trim().equalsIgnoreCase("L"))
+							if (RegionDB.setMode(true, args[1], sender.getName()))
+								sender.sendMessage(ChatColor.YELLOW + "设置完成！");
+							else
+								sender.sendMessage(ChatColor.RED + "未找到该区域！");
+						else if (args[2].trim().equalsIgnoreCase("A"))
+							if (RegionDB.setMode(false, args[1], sender.getName()))
+								sender.sendMessage(ChatColor.YELLOW + "设置完成！");
+							else
+								sender.sendMessage(ChatColor.RED + "未找到该区域！");
+						else
+							sender.sendMessage(ChatColor.RED + "请输入正确的模式代号(L 限制模式 / A 加速模式)！");
+				} else
+					return false;
+				return true;
+			} else if (args[0].trim().equalsIgnoreCase("setALLMode")) {
+				if (args.length == 2 && !args[1].trim().equals("")) {
+					if (args[1].trim().equalsIgnoreCase("L"))
+						RegionDB.setALLMode(true, sender.getName());
+					else if (args[1].trim().equalsIgnoreCase("A"))
+						RegionDB.setALLMode(false, sender.getName());
+					else
+						sender.sendMessage(ChatColor.RED + "请输入正确的模式代号(L 限制模式 / A 加速模式)！");
+				} else
+					return false;
 				return true;
 			} else if (args[0].trim().equalsIgnoreCase("help")) {
 				sender.sendMessage(ChatColor.AQUA + "\n所有指令的介绍(忽略大小写, 前面均加slimit)："
