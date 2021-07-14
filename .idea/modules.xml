@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/SLimit.iml" filepath="$PROJECT_DIR$/SLimit.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SManage.iml" filepath="$PROJECT_DIR$/SManage.iml" />
     </modules>
   </component>
 </project>

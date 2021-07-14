@@ -2,7 +2,7 @@
   <artifact type="jar" build-on-make="true" name="SManage3.0">
     <output-path>D:/DebugServer/plugins</output-path>
     <root id="archive" name="SManage3.0.jar">
-      <element id="module-output" name="SLimit" />
+      <element id="module-output" name="SManage" />
       <element id="file-copy" path="$PROJECT_DIR$/plugin.yml" />
     </root>
   </artifact>
