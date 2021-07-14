@@ -1,9 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" build-on-make="true" name="SLimit3.0">
-    <output-path>D:/DebugServer/plugins</output-path>
-    <root id="archive" name="SLimit3.0.jar">
-      <element id="module-output" name="SLimit" />
-      <element id="file-copy" path="$PROJECT_DIR$/plugin.yml" />
-    </root>
-  </artifact>
-</component>
