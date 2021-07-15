@@ -6,31 +6,31 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SLocation implements ConfigurationSerializable {
-    public double x, y, z;
+    public int x, y, z;
 
-    public double getX() {
+    public int getX() {
         return x;
     }
 
-    public SLocation setX(double x) {
+    public SLocation setX(int x) {
         this.x = x;
         return this;
     }
 
-    public double getY() {
+    public int getY() {
         return y;
     }
 
-    public SLocation setY(double y) {
+    public SLocation setY(int y) {
         this.y = y;
         return this;
     }
 
-    public double getZ() {
+    public int getZ() {
         return z;
     }
 
-    public SLocation setZ(double z) {
+    public SLocation setZ(int z) {
         this.z = z;
         return this;
     }
@@ -60,6 +60,6 @@ public class SLocation implements ConfigurationSerializable {
     }
 
     public static SLocation deserialize(Map<String, Object> args) {
-        return new SLocation().setX((Double) args.get("x")).setY((Double) args.get("y")).setZ((Double) args.get("z")).setWorld((String) args.get("world"));
+        return new SLocation().setX((int) args.get("x")).setY((int) args.get("y")).setZ((int) args.get("z")).setWorld((String) args.get("world"));
     }
 }

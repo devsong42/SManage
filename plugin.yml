@@ -6,6 +6,7 @@ load: STARTUP
 description: 区域限制生物生成
 commands:
   smanage:
+    aliases: sm
     description: SManage插件命令
     usage: /smanage
     permission: smanage.read
@@ -70,13 +71,23 @@ commands:
     usage: /smanage setter
     permission: smanage.edit
     permission-message: 你没有权限这么做
-  smanage setMode:
-    description: 设置某个区域的管理模式
-    usage: /smanage setMode [NAME] [L / A]
+  smanage setMonMode:
+    description: 设置某个区域的怪物管理模式
+    usage: /smanage setAniMode [NAME] [L / A]
     permission: smanage.edit
     permission-message: 你没有权限这么做
-  smanage setALLMode:
-    description: 设置所有区域的管理模式
+  smanage setALLMonMode:
+    description: 设置所有区域的怪物管理模式
+    usage: /smanage setMode [L / A]
+    permission: smanage.edit
+    permission-message: 你没有权限这么做
+  smanage setAniMode:
+    description: 设置某个区域的动物管理模式
+    usage: /smanage setAniMode [NAME] [L / A]
+    permission: smanage.edit
+    permission-message: 你没有权限这么做
+  smanage setALLAniMode:
+    description: 设置所有区域的动物管理模式
     usage: /smanage setMode [L / A]
     permission: smanage.edit
     permission-message: 你没有权限这么做

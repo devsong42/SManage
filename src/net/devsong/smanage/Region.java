@@ -13,7 +13,8 @@ public class Region implements ConfigurationSerializable {
 	private final String name;
 	private final String player;
 	private final String time;
-	private boolean mode = true;
+	private boolean aniMode = true;
+	private boolean monMode = true;
 	private String modifier;
 	private String modifyTime;
 	private SLocation ALocation, BLocation;
@@ -38,12 +39,21 @@ public class Region implements ConfigurationSerializable {
 		return time;
 	}
 
-	public boolean getMode() {
-		return mode;
+	public boolean getAniMode() {
+		return aniMode;
 	}
 
-	public Region setMode(boolean mode) {
-		this.mode = mode;
+	public Region setAniMode(boolean mode) {
+		this.aniMode = mode;
+		return this;
+	}
+
+	public boolean getMonMode() {
+		return monMode;
+	}
+
+	public Region setMonMode(boolean mode) {
+		this.monMode = mode;
 		return this;
 	}
 
@@ -88,7 +98,8 @@ public class Region implements ConfigurationSerializable {
 		data.put("name", this.name);
 		data.put("player", this.player);
 		data.put("time", this.time);
-		data.put("mode", this.mode);
+		data.put("monMode", this.monMode);
+		data.put("aniMode", this.aniMode);
 		data.put("modifier", this.modifier);
 		data.put("modifyTime", this.modifyTime);
 		data.put("MonSpeed", this.MonSpeed);
@@ -102,7 +113,7 @@ public class Region implements ConfigurationSerializable {
 		Date now = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		String dateStr = sdf.format(now);
-		return new Region((String) args.get("name"), (String) args.get("player"), dateStr).setMode((Boolean) args.get("mode"))
+		return new Region((String) args.get("name"), (String) args.get("player"), dateStr).setMonMode((Boolean) args.get("monMode")).setAniMode((Boolean) args.get("aniMode"))
 				.setMonSpeed((List<Integer>) args.get("MonSpeed")).setAniSpeed((List<Integer>) args.get("AniSpeed"))
 				.setALocation((SLocation) args.get("ALocation")).setBLocation((SLocation) args.get("BLocation"))
 				.setModifier((String) args.get("modifier")).setModifyTime((String) args.get("modifyTime"));

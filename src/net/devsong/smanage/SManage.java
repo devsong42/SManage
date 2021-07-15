@@ -191,15 +191,15 @@ public class SManage extends JavaPlugin {
 				RegionDB.setSetter(m);
 				sender.sendMessage(ChatColor.YELLOW + "设置完成! ");
 				return true;
-			} else if (args[0].trim().equalsIgnoreCase("setMode")) {
+			} else if (args[0].trim().equalsIgnoreCase("setMonMode")) {
 				if (args.length == 3 && !args[1].trim().equals("") && !args[2].trim().equals("")) {
 						if (args[2].trim().equalsIgnoreCase("L"))
-							if (RegionDB.setMode(true, args[1], sender.getName()))
+							if (RegionDB.setMonMode(true, args[1], sender.getName()))
 								sender.sendMessage(ChatColor.YELLOW + "设置完成！");
 							else
 								sender.sendMessage(ChatColor.RED + "未找到该区域！");
 						else if (args[2].trim().equalsIgnoreCase("A"))
-							if (RegionDB.setMode(false, args[1], sender.getName()))
+							if (RegionDB.setMonMode(false, args[1], sender.getName()))
 								sender.sendMessage(ChatColor.YELLOW + "设置完成！");
 							else
 								sender.sendMessage(ChatColor.RED + "未找到该区域！");
@@ -208,12 +208,40 @@ public class SManage extends JavaPlugin {
 				} else
 					return false;
 				return true;
-			} else if (args[0].trim().equalsIgnoreCase("setALLMode")) {
+			} else if (args[0].trim().equalsIgnoreCase("setALLMonMode")) {
 				if (args.length == 2 && !args[1].trim().equals("")) {
 					if (args[1].trim().equalsIgnoreCase("L"))
-						RegionDB.setALLMode(true, sender.getName());
+						RegionDB.setALLMonMode(true, sender.getName());
 					else if (args[1].trim().equalsIgnoreCase("A"))
-						RegionDB.setALLMode(false, sender.getName());
+						RegionDB.setALLMonMode(false, sender.getName());
+					else
+						sender.sendMessage(ChatColor.RED + "请输入正确的模式代号(L 限制模式 / A 加速模式)！");
+				} else
+					return false;
+				return true;
+			} else if (args[0].trim().equalsIgnoreCase("setAniMode")) {
+				if (args.length == 3 && !args[1].trim().equals("") && !args[2].trim().equals("")) {
+					if (args[2].trim().equalsIgnoreCase("L"))
+						if (RegionDB.setAniMode(true, args[1], sender.getName()))
+							sender.sendMessage(ChatColor.YELLOW + "设置完成！");
+						else
+							sender.sendMessage(ChatColor.RED + "未找到该区域！");
+					else if (args[2].trim().equalsIgnoreCase("A"))
+						if (RegionDB.setAniMode(false, args[1], sender.getName()))
+							sender.sendMessage(ChatColor.YELLOW + "设置完成！");
+						else
+							sender.sendMessage(ChatColor.RED + "未找到该区域！");
+					else
+						sender.sendMessage(ChatColor.RED + "请输入正确的模式代号(L 限制模式 / A 加速模式)！");
+				} else
+					return false;
+				return true;
+			} else if (args[0].trim().equalsIgnoreCase("setALLAniMode")) {
+				if (args.length == 2 && !args[1].trim().equals("")) {
+					if (args[1].trim().equalsIgnoreCase("L"))
+						RegionDB.setALLAniMode(true, sender.getName());
+					else if (args[1].trim().equalsIgnoreCase("A"))
+						RegionDB.setALLAniMode(false, sender.getName());
 					else
 						sender.sendMessage(ChatColor.RED + "请输入正确的模式代号(L 限制模式 / A 加速模式)！");
 				} else
@@ -229,12 +257,16 @@ public class SManage extends JavaPlugin {
 						+ "\n- list 查看已保存的区域"
 						+ "\n- detail [NAME] 查看某个区域的详情"
 						+ "\n- [OP] remove [NAME] 删除某个区域"
-						+ "\n- [OP] setMonSpeed [NAME] [NUMBER] 设置某个区域的怪物生成速度，规则为：降到原速的1/x，x为[NUMBER]，永不生成请输入1，暂不限制请输入0"
+						+ "\n- [OP] setMonSpeed [NAME] [NUMBER] 设置某个区域的怪物生成速度：当模式为限制模式时，降到原速的x分之一（默认x=3），当x=1时，永不生成，x=0时，暂不限制；为加速模式时，加速到原速的x倍（默认3），x=0或1时，暂不加速"
 						+ "\n- [OP] setALLMonSpeed [NUMBER] 设置所有区域的怪物生成速度，规则同前"
 						+ "\n- [OP] setAniSpeed [NAME] [NUMBER] 设置某个区域的动物生成速度，规则同前"
 						+ "\n- [OP] setALLAniSpeed [NUMBER] 设置所有区域的动物生成速度，规则同前"
+						+ "\n- [OP] setMonMode [NAME] [L / S] 设置某个区域的怪物生成的管理模式，L为限制模式，A为加速模式，默认为L"
+						+ "\n- [OP] setALLMonMode [L / S] 设置所有区域的怪物生成速度，规则同前"
+						+ "\n- [OP] setAniMode [NAME] [L / S] 设置某个区域的动物生成速度，规则同前"
+						+ "\n- [OP] setALLAniMode [L / S] 设置所有区域的动物生成速度，规则同前"
 						+ "\n- [OP] setter 重设划定区域时手持的物品为当前手持物品，注意不要双持"
-						+ "\n注: 1. 末影龙、凋零、老守卫者 不受限制; 2. [NAME]为区域名, [NUMBER]为一个数字");
+						+ "\n注: 1. 末影龙、凋零不受管理; 2. [NAME]为区域名, [NUMBER]为一个数字");
 				return true;
 			}
 			sender.sendMessage(ChatColor.RED + "未知指令! ");

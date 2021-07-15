@@ -15,6 +15,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -32,7 +33,7 @@ public class LimitListener implements Listener {
 		this.log = log;
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		if (event.getHand() != null && event.getHand().equals(EquipmentSlot.HAND)) {
 			if (event.getMaterial() == item) {
@@ -84,18 +85,20 @@ public class LimitListener implements Listener {
 	}
 
 	private void signA(Player player, Location pos) {
+		int x = pos.getBlockX(), y = pos.getBlockY(), z = pos.getBlockZ();
 		player.sendMessage(
-				org.bukkit.ChatColor.YELLOW + "[SManage] 标记A点: " + pos.getX() + ", " + pos.getY() + ", " + pos.getZ());
-		SManage.regions.get(player.getName()).setALocation(new SLocation().setX(pos.getX()).setY(pos.getY()).setZ(pos.getZ()).setWorld(pos.getWorld().getName()));
-		log.info(player.getName() + " 标记A点 " + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + " 于世界 "
+				org.bukkit.ChatColor.YELLOW + "[SManage] 标记A点: " + x + ", " + y + ", " + z);
+		SManage.regions.get(player.getName()).setALocation(new SLocation().setX(x).setY(y).setZ(z).setWorld(pos.getWorld().getName()));
+		log.info(player.getName() + " 标记A点 " + x + ", " + y + ", " + z + " 于世界 "
 				+ pos.getWorld().getName());
 	}
 
 	private void signB(Player player, Location pos) {
+		int x = pos.getBlockX(), y = pos.getBlockY(), z = pos.getBlockZ();
 		player.sendMessage(
-				org.bukkit.ChatColor.YELLOW + "[SManage] 标记B点: " + pos.getX() + ", " + pos.getY() + ", " + pos.getZ());
-		SManage.regions.get(player.getName()).setBLocation(new SLocation().setX(pos.getX()).setY(pos.getY()).setZ(pos.getZ()).setWorld(pos.getWorld().getName()));
-		log.info(player.getName() + " 标记B点 " + pos.getX() + ", " + pos.getY() + ", " + pos.getZ() + " 于世界 "
+				org.bukkit.ChatColor.YELLOW + "[SManage] 标记B点: " + x + ", " + y + ", " + z);
+		SManage.regions.get(player.getName()).setBLocation(new SLocation().setX(x).setY(y).setZ(z).setWorld(pos.getWorld().getName()));
+		log.info(player.getName() + " 标记B点 " + x + ", " + y + ", " + z + " 于世界 "
 				+ pos.getWorld().getName());
 	}
 
@@ -104,7 +107,7 @@ public class LimitListener implements Listener {
 		if (event.getSpawnReason() != CreatureSpawnEvent.SpawnReason.CUSTOM) {
 			Entity entity = event.getEntity();
 			List<Integer> Speed;
-			if (entity instanceof Monster && !(entity instanceof Boss) && !(entity instanceof ElderGuardian)) {
+			if (entity instanceof Monster && !(entity instanceof Boss)) {
 				Speed = RegionDB.retrieval(event.getLocation(), true);
 				if (Speed != null) {
 					if (Speed.get(0) != -1) {

@@ -47,6 +47,7 @@ public class RegionDB {
 			region.setModifyTime(getTime());
 			flag = true;
 		} else {
+			re.setALocation(region.getALocation()).setBLocation(region.getBLocation());
 			re.setModifier(player);
 			re.setModifyTime(getTime());
 			flag = false;
@@ -67,10 +68,10 @@ public class RegionDB {
 		return false;
 	}
 
-	public static boolean setMode(boolean mode, String name, String player) {
+	public static boolean setMonMode(boolean mode, String name, String player) {
 		Region re = getRegion(name);
 		if (re != null) {
-			re.setMode(mode).setModifier(player).setModifyTime(getTime());
+			re.setMonMode(mode).setModifier(player).setModifyTime(getTime());
 			javaPlugin.getConfig().set("RegionList", Regions);
 			javaPlugin.saveConfig();
 			return true;
@@ -78,9 +79,28 @@ public class RegionDB {
 			return false;
 	}
 
-	public static void setALLMode(boolean mode, String player) {
+	public static void setALLMonMode(boolean mode, String player) {
 		for (Region region : Regions) {
-			region.setMode(mode).setModifier(player).setModifyTime(getTime());
+			region.setMonMode(mode).setModifier(player).setModifyTime(getTime());
+			javaPlugin.getConfig().set("RegionList", Regions);
+			javaPlugin.saveConfig();
+		}
+	}
+
+	public static boolean setAniMode(boolean mode, String name, String player) {
+		Region re = getRegion(name);
+		if (re != null) {
+			re.setAniMode(mode).setModifier(player).setModifyTime(getTime());
+			javaPlugin.getConfig().set("RegionList", Regions);
+			javaPlugin.saveConfig();
+			return true;
+		} else
+			return false;
+	}
+
+	public static void setALLAniMode(boolean mode, String player) {
+		for (Region region : Regions) {
+			region.setAniMode(mode).setModifier(player).setModifyTime(getTime());
 			javaPlugin.getConfig().set("RegionList", Regions);
 			javaPlugin.saveConfig();
 		}
@@ -158,12 +178,11 @@ public class RegionDB {
 			if (region.getName().equals(name)) {
 				detail = "名称：" + region.getName() + "\n创建者： " + region.getPlayer() + "\n创建时间： " + region.getTime()
 						+ "\n最近修改者： " + region.getModifier() + "\n最近修改时间： " + region.getModifyTime() + "\n世界： "
-						+ region.getALocation().getWorld() + "\nA点： X:" + region.getALocation().getX() + ", Y:"
+						+ getWorld(region.getALocation().getWorld()) + "\nA点： X:" + region.getALocation().getX() + ", Y:"
 						+ region.getALocation().getY() + ", Z:" + region.getALocation().getZ() + "\nB点： X:"
 						+ region.getBLocation().getX() + ", Y:" + region.getBLocation().getY() + ", Z:"
-						+ region.getBLocation().getZ() + "\n怪物生成速度：" + getSpeed(region.getMonSpeed().get(1), region.getMode())
-						+ "\n动物生成速度：" + getSpeed(region.getAniSpeed().get(1), region.getMode())
-						+ "\n管理模式：" + (region.getMode() ? "限制模式" : "加速模式");
+						+ region.getBLocation().getZ() + "\n怪物生成速度：" + getSpeed(region.getMonSpeed().get(1), region.getMonMode())
+						+ "\n动物生成速度：" + getSpeed(region.getAniSpeed().get(1), region.getAniMode());
 				return detail;
 			}
 		}
@@ -195,7 +214,7 @@ public class RegionDB {
 						if ((APoint.getZ() <= location.getZ() && location.getZ() <= BPoint.getZ())
 								|| APoint.getZ() >= location.getZ() && location.getZ() >= BPoint.getZ())
 							if (Objects.requireNonNull(location.getWorld()).getName().equals(APoint.getWorld())) {
-								if (region.getMode()) {
+								if (flag ? region.getMonMode() : region.getAniMode()) {
 									i1 = flag ? region.getMonSpeed() : region.getAniSpeed();
 									i.add(i1.get(0));
 									i.add(i1.get(1));
@@ -214,12 +233,12 @@ public class RegionDB {
 		return null;
 	}
 
-	private static String getWorld(Location location) {
-		return switch (Objects.requireNonNull(location.getWorld()).getName()) {
+	private static String getWorld(String name) {
+		return switch (name) {
 			case "world" -> "主世界";
 			case "world_the_end" -> "末影之地";
 			case "world_nether" -> "下界地狱";
-			default -> location.getWorld().getName();
+			default -> name;
 		};
 	}
 
