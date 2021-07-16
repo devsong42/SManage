@@ -104,39 +104,37 @@ public class LimitListener implements Listener {
 
 	@EventHandler(ignoreCancelled = true)
 	public void onCreatureSpawnEvent(CreatureSpawnEvent event) {
-		if (event.getSpawnReason() != CreatureSpawnEvent.SpawnReason.CUSTOM) {
-			Entity entity = event.getEntity();
-			List<Integer> Speed;
-			if (entity instanceof Monster && !(entity instanceof Boss)) {
-				Speed = RegionDB.retrieval(event.getLocation(), true);
-				if (Speed != null) {
-					if (Speed.get(0) != -1) {
-						if (Speed.get(1) == 1) {
-							event.setCancelled(true);
-						} else if (Speed.get(0) < Speed.get(1)) {
-							event.setCancelled(true);
-							RegionDB.setMonSpeed0(Speed.get(2), Speed.get(0) + 1);
-						} else
-							RegionDB.setMonSpeed0(Speed.get(2), 1);
+		Entity entity = event.getEntity();
+		List<Integer> Speed;
+		if (entity instanceof Monster && !(entity instanceof Boss)) {
+			Speed = RegionDB.retrieval(event.getLocation(), true);
+			if (Speed != null) {
+				if (Speed.get(0) != -1) {
+					if (Speed.get(1) == 1) {
+						event.setCancelled(true);
+					} else if (Speed.get(0) < Speed.get(1)) {
+						event.setCancelled(true);
+						RegionDB.setMonSpeed0(Speed.get(2), Speed.get(0) + 1);
 					} else
-						for (int i = 1; i < Speed.get(1); i++)
-							Objects.requireNonNull(event.getLocation().getWorld()).spawnEntity(event.getLocation(), entity.getType());
-				}
-			} else if (entity instanceof Animals) {
-				Speed = RegionDB.retrieval(event.getLocation(), false);
-				if (Speed != null)
-					if (Speed.get(0) != -1) {
-						if (Speed.get(1) == 1) {
-							event.setCancelled(true);
-						} else if (Speed.get(0) < Speed.get(1)) {
-							event.setCancelled(true);
-							RegionDB.setAniSpeed0(Speed.get(2), Speed.get(0) + 1);
-						} else
-							RegionDB.setAniSpeed0(Speed.get(2), 1);
-					} else
-						for (int i = 1; i < Speed.get(1); i++)
-							Objects.requireNonNull(event.getLocation().getWorld()).spawnEntity(event.getLocation(), entity.getType());
+						RegionDB.setMonSpeed0(Speed.get(2), 1);
+				} else if (event.getSpawnReason() != CreatureSpawnEvent.SpawnReason.CUSTOM)
+					for (int i = 1; i < Speed.get(1); i++)
+						Objects.requireNonNull(event.getLocation().getWorld()).spawnEntity(event.getLocation(), entity.getType());
 			}
+		} else if (entity instanceof Animals) {
+			Speed = RegionDB.retrieval(event.getLocation(), false);
+			if (Speed != null)
+				if (Speed.get(0) != -1) {
+					if (Speed.get(1) == 1) {
+						event.setCancelled(true);
+					} else if (Speed.get(0) < Speed.get(1)) {
+						event.setCancelled(true);
+						RegionDB.setAniSpeed0(Speed.get(2), Speed.get(0) + 1);
+					} else
+						RegionDB.setAniSpeed0(Speed.get(2), 1);
+				} else if (event.getSpawnReason() != CreatureSpawnEvent.SpawnReason.CUSTOM)
+					for (int i = 1; i < Speed.get(1); i++)
+						Objects.requireNonNull(event.getLocation().getWorld()).spawnEntity(event.getLocation(), entity.getType());
 		}
 	}
 }
