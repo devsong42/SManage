@@ -110,10 +110,7 @@ public class Region implements ConfigurationSerializable {
 	}
 
 	public static Region deserialize(Map<String, Object> args) {
-		Date now = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		String dateStr = sdf.format(now);
-		return new Region((String) args.get("name"), (String) args.get("player"), dateStr).setMonMode((Boolean) args.get("monMode")).setAniMode((Boolean) args.get("aniMode"))
+		return new Region((String) args.get("name"), (String) args.get("player"), (String) args.get("time")).setMonMode((Boolean) args.get("monMode")).setAniMode((Boolean) args.get("aniMode"))
 				.setMonSpeed((List<Integer>) args.get("MonSpeed")).setAniSpeed((List<Integer>) args.get("AniSpeed"))
 				.setALocation((SLocation) args.get("ALocation")).setBLocation((SLocation) args.get("BLocation"))
 				.setModifier((String) args.get("modifier")).setModifyTime((String) args.get("modifyTime"));
