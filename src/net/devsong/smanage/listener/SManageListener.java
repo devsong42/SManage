@@ -25,11 +25,11 @@ import org.bukkit.inventory.EquipmentSlot;
 import net.devsong.smanage.RegionDB;
 import net.md_5.bungee.api.ChatColor;
 
-public class LimitListener implements Listener {
+public class SManageListener implements Listener {
 	private Logger log;
 	public static Material item = Material.APPLE;
 
-	public LimitListener(Logger log) {
+	public SManageListener(Logger log) {
 		this.log = log;
 	}
 

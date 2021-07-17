@@ -12,7 +12,7 @@ import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import net.devsong.smanage.listener.LimitListener;
+import net.devsong.smanage.listener.SManageListener;
 
 public class SManage extends JavaPlugin {
 	public static HashMap<String, Region> regions = new HashMap<>();
@@ -25,7 +25,7 @@ public class SManage extends JavaPlugin {
 		String m = getConfig().getString("Setter", "APPLE");
 		RegionDB.Load(Objects.requireNonNullElseGet(list, ArrayList::new), Material.getMaterial(m), this);
 		Objects.requireNonNull(getCommand("smanage")).setExecutor(this);
-		Bukkit.getPluginManager().registerEvents(new LimitListener(getLogger()), this);
+		Bukkit.getPluginManager().registerEvents(new SManageListener(getLogger()), this);
 		super.onEnable();
 	}
 
@@ -187,7 +187,7 @@ public class SManage extends JavaPlugin {
 				return true;
 			} else if (args[0].trim().equalsIgnoreCase("setter")) {
 				Material m = ((Player) sender).getItemInHand().getType();
-				LimitListener.item = m;
+				SManageListener.item = m;
 				RegionDB.setSetter(m);
 				sender.sendMessage(ChatColor.YELLOW + "设置完成! ");
 				return true;

@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import net.devsong.smanage.listener.LimitListener;
+import net.devsong.smanage.listener.SManageListener;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -21,12 +21,12 @@ public class RegionDB {
 
 	public static void Load(ArrayList<Region> list, Material material, JavaPlugin javaplugin) {
 		Regions = list;
-		LimitListener.item = material;
+		SManageListener.item = material;
 		javaPlugin = javaplugin;
 	}
 
 	public static void setSetter(Material m) {
-		LimitListener.item = m;
+		SManageListener.item = m;
 		javaPlugin.getConfig().set("Setter", m.name());
 		javaPlugin.saveConfig();
 	}
