@@ -3,7 +3,7 @@ main: net.devsong.smanage.SManage
 version: 3.3
 author: Devsong
 load: STARTUP
-description: 区域限制生物生成
+description: 区域管理生物生成
 commands:
   smanage:
     aliases: sm
