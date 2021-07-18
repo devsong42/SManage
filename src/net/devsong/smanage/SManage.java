@@ -2,6 +2,7 @@ package net.devsong.smanage;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -13,9 +14,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.devsong.smanage.listener.SManageListener;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class SManage extends JavaPlugin {
 	public static HashMap<String, Region> regions = new HashMap<>();
+	private String[] subComs = {"reload", "set", "save", "cancel", "list", "detail", "remove", "setMonSpeed", "setALLMonSpeed", "setAniSpeed", "setALLAniSpeed", "setter", "setMonMode", "setALLMonMode", "setAniMode", "setALLAniMode", "help"};
 
 	@Override
 	public void onEnable() {
@@ -30,7 +34,7 @@ public class SManage extends JavaPlugin {
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
 		if (sender instanceof Player) {
 			if (args.length == 0) {
 				sender.sendMessage(ChatColor.YELLOW + "哈? 你输入这个干嘛? ");
@@ -272,5 +276,20 @@ public class SManage extends JavaPlugin {
 			sender.sendMessage(ChatColor.RED + "未知指令! ");
 		}
 		return true;
+	}
+
+	@Nullable
+	@Override
+	public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+		if (args.length > 2)
+			return new ArrayList<>();
+		if (args.length == 2)
+			if (args[0].trim().equalsIgnoreCase("set") || args[0].trim().equalsIgnoreCase("detail") || args[0].trim().equalsIgnoreCase("remove") || args[0].trim().equalsIgnoreCase("setMonSpeed") || args[0].trim().equalsIgnoreCase("setAniSpeed") || args[0].trim().equalsIgnoreCase("setMonMode") || args[0].trim().equalsIgnoreCase("setAniMode"))
+				return RegionDB.getNames();
+			else
+				return new ArrayList<>();
+		if (args.length == 0)
+			return Arrays.asList(subComs);
+		return Arrays.stream(subComs).filter(s -> s.startsWith(args[0])).collect(Collectors.toList());
 	}
 }
