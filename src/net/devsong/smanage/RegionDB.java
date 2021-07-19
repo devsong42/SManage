@@ -208,11 +208,11 @@ public class RegionDB {
 				BPoint = region.getBLocation();
 				if (APoint == null || BPoint == null)
 					continue;
-				if ((APoint.getX() <= location.getX() && location.getX() <= BPoint.getX())
-						|| APoint.getX() >= location.getX() && location.getX() >= BPoint.getX())
-					if (APoint.getY() - location.getY() <= 2 || BPoint.getY() - location.getY() <= 2)
-						if ((APoint.getZ() <= location.getZ() && location.getZ() <= BPoint.getZ())
-								|| APoint.getZ() >= location.getZ() && location.getZ() >= BPoint.getZ())
+				if ((APoint.getX() <= location.getBlockX() && location.getBlockX() <= BPoint.getX())
+						|| APoint.getX() >= location.getBlockX() && location.getBlockX() >= BPoint.getX())
+					if (location.getBlockY() > APoint.getY() || location.getBlockY() > BPoint.getY())
+						if ((APoint.getZ() <= location.getBlockZ() && location.getBlockZ() <= BPoint.getZ())
+								|| APoint.getZ() >= location.getBlockZ() && location.getBlockZ() >= BPoint.getZ())
 							if (Objects.requireNonNull(location.getWorld()).getName().equals(APoint.getWorld())) {
 								if (flag ? region.getMonMode() : region.getAniMode()) {
 									i1 = flag ? region.getMonSpeed() : region.getAniSpeed();

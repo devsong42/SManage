@@ -1,99 +1,18 @@
 name: SManage
 main: net.devsong.smanage.SManage
-version: 3.3
+version: 3.4
 author: Devsong
 load: STARTUP
 description: 区域管理生物生成
 commands:
   smanage:
-    aliases: sm
     description: SManage插件命令
     usage: /smanage
     permission: smanage.read
     permission-message: 你没有权限这么做
-  smanage reload:
-    description: 重新加载SManage配置文件
-    usage: /smanage reload
-    permission: smanage.edit
-    permission-message: 你没有权限这么做
-  smanage set:
-    description: 设置一个区域
-    usage: /smanage set <NAME>
-    permission: smanage.edit
-    permission-message: 你没有权限这么做
-  smanage save:
-    description: 保存已更改的区域
-    usage: /smanage save
-    permission: smanage.edit
-    permission-message: 你没有权限这么做
-  smanage cancel:
-    description: 取消本次新建/修改区域
-    usage: /smanage cancel
-    permission: smanage.edit
-    permission-message: 你没有权限这么做
-  smanage list:
-    description: 查看已保存的区域
-    usage: /smanage list
-    permission: smanage.read
-    permission-message: 你没有权限这么做
-  smanage detail:
-    description: 查看某个区域的详情
-    usage: /smanage detail <NAME>
-    permission: smanage.read
-    permission-message: 你没有权限这么做
-  smanage remove:
-    description: 删除某个区域
-    usage: /smanage remove <NAME>
-    permission: smanage.edit
-    permission-message: 你没有权限这么做
-  smanage setMonSpeed:
-    description: 设置单个区域怪物生成速度
-    usage: /smanage setMonSpeed <NAME> <NUMBER>
-    permission: smanage.edit
-    permission-message: 你没有权限这么做
-  smanage setALLMonSpeed:
-    description: 设置所有区域怪物生成速度
-    usage: /smanage setALLMonSpeed <NUMBER>
-    permission: smanage.edit
-    permission-message: 你没有权限这么做
-  smanage setAniSpeed:
-    description: 设置单个区域动物生成速度
-    usage: /smanage setAniSpeed <NAME> <NUMBER>
-    permission: smanage.edit
-    permission-message: 你没有权限这么做
-  smanage setALLAniSpeed:
-    description: 设置所有区域动物生成速度
-    usage: /smanage setALLAniSpeed <NUMBER>
-    permission: smanage.edit
-    permission-message: 你没有权限这么做
-  smanage setter:
-    description: 设置划定区域的物品
-    usage: /smanage setter
-    permission: smanage.edit
-    permission-message: 你没有权限这么做
-  smanage setMonMode:
-    description: 设置某个区域的怪物管理模式
-    usage: /smanage setAniMode [NAME] [L / A]
-    permission: smanage.edit
-    permission-message: 你没有权限这么做
-  smanage setALLMonMode:
-    description: 设置所有区域的怪物管理模式
-    usage: /smanage setMode [L / A]
-    permission: smanage.edit
-    permission-message: 你没有权限这么做
-  smanage setAniMode:
-    description: 设置某个区域的动物管理模式
-    usage: /smanage setAniMode [NAME] [L / A]
-    permission: smanage.edit
-    permission-message: 你没有权限这么做
-  smanage setALLAniMode:
-    description: 设置所有区域的动物管理模式
-    usage: /smanage setMode [L / A]
-    permission: smanage.edit
-    permission-message: 你没有权限这么做
-  smanage help:
-    description: 查看SLimit插件使用说明
-    usage: /smanage help
+  sm:
+    description: SManage插件命令
+    usage: /sm
     permission: smanage.read
     permission-message: 你没有权限这么做
 permissions:
