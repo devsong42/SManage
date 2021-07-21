@@ -343,30 +343,31 @@ public class SManage extends JavaPlugin {
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String
             alias, @NotNull String[] args) {
-        String[] subComsOP = {"reload", "set", "save", "cancel", "list", "detail", "remove", "setmonspeed", "setallmonspeed", "setanispeed", "setallanispeed", "setter", "setmonmode", "setallmonmode", "setanimode", "setallanimode", "help"};
+        String[] subComsOP = {"reload", "set", "save", "cancel", "list", "detail", "remove", "setMonSpeed", "setALLMonSpeed", "setAniSpeed", "setALLAniSpeed", "setter", "setMonMode", "setALLMonMode", "setAniMode", "setALLAniMode", "help"};
         String[] subComs = {"list", "detail", "help"};
+        String[] modes = {"L", "A"};
         if (sender.hasPermission("smanage.edit"))
             switch (args.length) {
                 case 1:
-                    return Arrays.stream(subComsOP).filter(s -> s.startsWith(args[0].toLowerCase())).collect(Collectors.toList());
+                    return Arrays.stream(subComsOP).filter(s -> s.toLowerCase().contains(args[0].toLowerCase())).collect(Collectors.toList());
                 case 2:
                     if (args[0].trim().equalsIgnoreCase("set") || args[0].trim().equalsIgnoreCase("detail") || args[0].trim().equalsIgnoreCase("remove") || args[0].trim().equalsIgnoreCase("setMonSpeed") || args[0].trim().equalsIgnoreCase("setAniSpeed") || args[0].trim().equalsIgnoreCase("setMonMode") || args[0].trim().equalsIgnoreCase("setAniMode"))
-                        return Arrays.stream(RegionDB.getNames().toArray(new String[0])).filter(s -> s.startsWith(args[1])).collect(Collectors.toList());
+                        return Arrays.stream(RegionDB.getNames().toArray(new String[0])).filter(s -> s.contains(args[1])).collect(Collectors.toList());
                     else if (args[0].trim().equalsIgnoreCase("setALLMonMode") || args[0].trim().equalsIgnoreCase("setALLAniMode"))
-                        return Arrays.stream(new String[]{"L", "A"}).filter(s -> s.startsWith(args[1].toLowerCase())).collect(Collectors.toList());
+                        return Arrays.stream(modes).filter(s -> s.toLowerCase().contains(args[0].toLowerCase())).collect(Collectors.toList());
                 case 3:
                     if (args[0].trim().equalsIgnoreCase("setMonMode") || args[0].trim().equalsIgnoreCase("setAniMode"))
-                        return Arrays.stream(new String[]{"L", "A"}).filter(s -> s.startsWith(args[2].toLowerCase())).collect(Collectors.toList());
+                        return Arrays.stream(modes).filter(s -> s.toLowerCase().contains(args[0].toLowerCase())).collect(Collectors.toList());
                 default:
                     return new ArrayList<>();
             }
         else if (sender.hasPermission("smanage.read"))
             switch (args.length) {
                 case 1:
-                    return Arrays.stream(subComs).filter(s -> s.startsWith(args[0].toLowerCase())).collect(Collectors.toList());
+                    return Arrays.stream(subComs).filter(s -> s.toLowerCase().contains(args[0].toLowerCase())).collect(Collectors.toList());
                 case 2:
                     if (args[0].trim().equalsIgnoreCase("detail"))
-                        return Arrays.stream(RegionDB.getNames().toArray(new String[0])).filter(s -> s.startsWith(args[1])).collect(Collectors.toList());
+                        return Arrays.stream(RegionDB.getNames().toArray(new String[0])).filter(s -> s.contains(args[1])).collect(Collectors.toList());
                 default:
                     return new ArrayList<>();
             }

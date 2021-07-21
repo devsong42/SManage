@@ -8,12 +8,7 @@ import net.devsong.smanage.SLocation;
 import net.devsong.smanage.SManage;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.Animals;
-import org.bukkit.entity.Boss;
-import org.bukkit.entity.ElderGuardian;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Monster;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -106,7 +101,7 @@ public class SManageListener implements Listener {
 	public void onCreatureSpawnEvent(CreatureSpawnEvent event) {
 		Entity entity = event.getEntity();
 		List<Integer> Speed;
-		if (entity instanceof Monster && !(entity instanceof Boss)) {
+		if (entity instanceof Monster && !(entity instanceof Boss) || entity instanceof Slime) {
 			Speed = RegionDB.retrieval(event.getLocation(), true);
 			if (Speed != null) {
 				if (Speed.get(0) != -1) {

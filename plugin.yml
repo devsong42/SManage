@@ -1,18 +1,14 @@
 name: SManage
 main: net.devsong.smanage.SManage
-version: 3.4
+version: 3.5
 author: Devsong
 load: STARTUP
 description: 区域管理生物生成
 commands:
   smanage:
+    aliases: sm
     description: SManage插件命令
     usage: /smanage
-    permission: smanage.read
-    permission-message: 你没有权限这么做
-  sm:
-    description: SManage插件命令
-    usage: /sm
     permission: smanage.read
     permission-message: 你没有权限这么做
 permissions:
