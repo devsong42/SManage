@@ -106,6 +106,25 @@ public class RegionDB {
 		}
 	}
 
+	public static boolean setUniversal(boolean universal, String name, String player) {
+		Region re = getRegion(name);
+		if (re != null) {
+			re.setUniversal(universal).setModifier(player).setModifyTime(getTime());
+			javaPlugin.getConfig().set("RegionList", Regions);
+			javaPlugin.saveConfig();
+			return true;
+		} else
+			return false;
+	}
+
+	public static void setALLUniversal(boolean universal, String player) {
+		for (Region region : Regions) {
+			region.setUniversal(universal).setModifier(player).setModifyTime(getTime());
+			javaPlugin.getConfig().set("RegionList", Regions);
+			javaPlugin.saveConfig();
+		}
+	}
+
 	public static void setMonSpeed0(int Index, int i) {
 		Region region = Regions.get(Index);
 		List<Integer> ints = region.getMonSpeed();
@@ -178,10 +197,15 @@ public class RegionDB {
 			if (region.getName().equals(name)) {
 				detail = "名称：" + region.getName() + "\n创建者： " + region.getPlayer() + "\n创建时间： " + region.getTime()
 						+ "\n最近修改者： " + region.getModifier() + "\n最近修改时间： " + region.getModifyTime() + "\n世界： "
-						+ getWorld(region.getALocation().getWorld()) + "\nA点： X:" + region.getALocation().getX() + ", Y:"
-						+ region.getALocation().getY() + ", Z:" + region.getALocation().getZ() + "\nB点： X:"
-						+ region.getBLocation().getX() + ", Y:" + region.getBLocation().getY() + ", Z:"
-						+ region.getBLocation().getZ() + "\n怪物生成速度：" + getSpeed(region.getMonSpeed().get(1), region.getMonMode())
+						+ getWorld(region.getALocation().getWorld());
+				if (region.getUniversal())
+					detail += "\n世界通用性：是";
+				else
+					detail += "\nA点： X:" + region.getALocation().getX() + ", Y:"
+							+ region.getALocation().getY() + ", Z:" + region.getALocation().getZ() + "\nB点： X:"
+							+ region.getBLocation().getX() + ", Y:" + region.getBLocation().getY() + ", Z:"
+							+ region.getBLocation().getZ();
+				detail += "\n怪物生成速度：" + getSpeed(region.getMonSpeed().get(1), region.getMonMode())
 						+ "\n动物生成速度：" + getSpeed(region.getAniSpeed().get(1), region.getAniMode());
 				return detail;
 			}
@@ -208,10 +232,10 @@ public class RegionDB {
 				BPoint = region.getBLocation();
 				if (APoint == null || BPoint == null)
 					continue;
-				if ((APoint.getX() <= location.getBlockX() && location.getBlockX() <= BPoint.getX())
+				if (region.getUniversal() || (APoint.getX() <= location.getBlockX() && location.getBlockX() <= BPoint.getX())
 						|| APoint.getX() >= location.getBlockX() && location.getBlockX() >= BPoint.getX())
-					if (location.getBlockY() > APoint.getY() || location.getBlockY() > BPoint.getY())
-						if ((APoint.getZ() <= location.getBlockZ() && location.getBlockZ() <= BPoint.getZ())
+					if (region.getUniversal() || location.getBlockY() > APoint.getY() || location.getBlockY() > BPoint.getY())
+						if (region.getUniversal() || (APoint.getZ() <= location.getBlockZ() && location.getBlockZ() <= BPoint.getZ())
 								|| APoint.getZ() >= location.getBlockZ() && location.getBlockZ() >= BPoint.getZ())
 							if (Objects.requireNonNull(location.getWorld()).getName().equals(APoint.getWorld())) {
 								if (flag ? region.getMonMode() : region.getAniMode()) {

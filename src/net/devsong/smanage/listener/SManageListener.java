@@ -46,11 +46,13 @@ public class SManageListener implements Listener {
 										.equals(pos.getWorld().getName())) {
 									// 发送标记信息
 									signA(player, pos);
+									event.setCancelled(true);
 								} else
 									player.sendMessage(ChatColor.RED + "请在同一个世界标记！");
 							} else {
 								// 发送标记信息
 								signA(player, pos);
+								event.setCancelled(true);
 							}
 						}
 					}
@@ -65,16 +67,17 @@ public class SManageListener implements Listener {
 										.equals(pos.getWorld().getName())) {
 									// 发送标记信息
 									signB(player, pos);
+									event.setCancelled(true);
 								} else
 									player.sendMessage(ChatColor.RED + "请在同一个世界标记！");
 							} else {
 								// 发送标记信息
 								signB(player, pos);
+								event.setCancelled(true);
 							}
 						}
 					}
 				}
-				event.setCancelled(true);
 			}
 		}
 	}
