@@ -26,10 +26,18 @@ public class SManage extends JavaPlugin {
         ConfigurationSerialization.registerClass(SLocation.class);
         ArrayList<Region> list = (ArrayList<Region>) getConfig().getList("RegionList");
         String m = getConfig().getString("Setter", "APPLE");
-        RegionDB.Load(Objects.requireNonNullElseGet(list, ArrayList::new), Material.getMaterial(m), this);
+        RegionDB.Load(Objects.requireNonNullElseGet(list, ArrayList::new), Material.getMaterial(m));
         getCommand("smanage").setExecutor(this);
         Bukkit.getPluginManager().registerEvents(new SManageListener(getLogger()), this);
         super.onEnable();
+    }
+
+    @Override
+    public void onDisable() {
+        this.getConfig().set("RegionList", RegionDB.Regions);
+        this.getConfig().set("Setter", SManageListener.item.name());
+        this.saveConfig();
+        super.onDisable();
     }
 
     @Override
@@ -39,11 +47,15 @@ public class SManage extends JavaPlugin {
             return true;
         } else if (args[0].trim().equalsIgnoreCase("reload")) {
             if (sender.hasPermission("smanage.edit")) {
+                this.getConfig().set("RegionList", RegionDB.Regions);
+                this.getConfig().set("Setter", SManageListener.item.name());
+                this.saveConfig();
                 reloadConfig();
                 ArrayList<Region> list = (ArrayList<Region>) getConfig().getList("RegionList");
                 String m = getConfig().getString("Setter", "APPLE");
-                RegionDB.Load(Objects.requireNonNullElseGet(list, ArrayList::new), Material.getMaterial(m), this);
-                sender.sendMessage(ChatColor.YELLOW + "已重新加载配置");
+                RegionDB.Load(Objects.requireNonNullElseGet(list, ArrayList::new), Material.getMaterial(m));
+                sender.sendMessage(ChatColor.YELLOW + "已重新加载");
+                getLogger().info(sender.getName() + "重载插件");
             } else
                 sender.sendMessage(ChatColor.RED + "你似乎没有足够的权限...");
             return true;
@@ -350,7 +362,7 @@ public class SManage extends JavaPlugin {
             if (sender.hasPermission("smanage.read")) {
                 sender.sendMessage(ChatColor.AQUA + "\n所有指令的介绍(忽略大小写, 前面均加sm)："
                         + "\n- help 获取帮助"
-                        + "\n- [OP] reload 重新加载插件"
+                        + "\n- [OP] reload 存储区域至磁盘并重新加载"
                         + "\n- [OP] set [NAME] 设置一个区域，若没有此区域将新建"
                         + "\n- [OP] save 保存已更改的区域"
                         + "\n- [OP] cancel 取消本次新建/修改区域"
@@ -390,21 +402,19 @@ public class SManage extends JavaPlugin {
                 case 1:
                     return Arrays.stream(subComsOP).filter(s -> s.toLowerCase().contains(args[0].toLowerCase())).collect(Collectors.toList());
                 case 2:
-                    if (args[0].trim().equalsIgnoreCase("set") || args[0].trim().equalsIgnoreCase("detail") || args[0].trim().equalsIgnoreCase("remove") || args[0].trim().equalsIgnoreCase("setMonSpeed") || args[0].trim().equalsIgnoreCase("setAniSpeed") || args[0].trim().equalsIgnoreCase("setMonMode") || args[0].trim().equalsIgnoreCase("setAniMode"))
+                    if (args[0].trim().equalsIgnoreCase("set") || args[0].trim().equalsIgnoreCase("detail") || args[0].trim().equalsIgnoreCase("remove") || args[0].trim().equalsIgnoreCase("setMonSpeed") || args[0].trim().equalsIgnoreCase("setAniSpeed") || args[0].trim().equalsIgnoreCase("setMonMode") || args[0].trim().equalsIgnoreCase("setAniMode") || args[0].trim().equalsIgnoreCase("setUniversal"))
                         return Arrays.stream(RegionDB.getNames().toArray(new String[0])).filter(s -> s.contains(args[1])).collect(Collectors.toList());
-                    else if (args[0].trim().equalsIgnoreCase("setALLMonMode") || args[0].trim().equalsIgnoreCase("setALLAniMode"))
+                    if (args[0].trim().equalsIgnoreCase("setALLMonMode") || args[0].trim().equalsIgnoreCase("setALLAniMode"))
                         return Arrays.stream(modes).filter(s -> s.toLowerCase().contains(args[1].toLowerCase())).collect(Collectors.toList());
-                    else if (args[0].trim().equalsIgnoreCase("setALLUniversal"))
+                    if (args[0].trim().equalsIgnoreCase("setALLUniversal"))
                         return Arrays.stream(universal).filter(s -> s.toLowerCase().contains(args[1].toLowerCase())).collect(Collectors.toList());
-                    else if (args[0].trim().equalsIgnoreCase("setMonMode") || args[0].trim().equalsIgnoreCase("setAniMode"))
-                        return Arrays.stream(RegionDB.getNames().toArray(new String[0])).filter(s -> s.contains(args[1])).collect(Collectors.toList());
-                    else if (args[0].trim().equalsIgnoreCase("setUniversal"))
-                        return Arrays.stream(RegionDB.getNames().toArray(new String[0])).filter(s -> s.contains(args[1])).collect(Collectors.toList());
+                    return new ArrayList<>();
                 case 3:
                     if (args[0].trim().equalsIgnoreCase("setMonMode") || args[0].trim().equalsIgnoreCase("setAniMode"))
                         return Arrays.stream(modes).filter(s -> s.toLowerCase().contains(args[2].toLowerCase())).collect(Collectors.toList());
-                    else if (args[0].trim().equalsIgnoreCase("setUniversal"))
+                    if (args[0].trim().equalsIgnoreCase("setUniversal"))
                         return Arrays.stream(universal).filter(s -> s.toLowerCase().contains(args[2].toLowerCase())).collect(Collectors.toList());
+                    return new ArrayList<>();
                 default:
                     return new ArrayList<>();
             }
