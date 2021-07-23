@@ -105,6 +105,7 @@ public class SManageListener implements Listener {
         for (int index = 0; index < RegionDB.getSize(); index++) {
             Speed = RegionDB.retrieval(event.getLocation(), mode, index);
             if (Speed != null) {
+                index = Speed.get(2);
                 if (Speed.get(0) != -1) {
                     if (Speed.get(1) == 1) {
                         event.setCancelled(true);
@@ -117,20 +118,17 @@ public class SManageListener implements Listener {
                             else
                                 RegionDB.setAniSpeed0(Speed.get(2), Speed.get(0) + 1);
                         }
-                        index = Speed.get(2);
                     } else {
-                        if (mode)
-                            RegionDB.setMonSpeed0(Speed.get(2), 1);
-                        else
-                            RegionDB.setAniSpeed0(Speed.get(2), 1);
-                        index = Speed.get(2);
+                        if (!event.isCancelled()) {
+                            if (mode)
+                                RegionDB.setMonSpeed0(Speed.get(2), 1);
+                            else
+                                RegionDB.setAniSpeed0(Speed.get(2), 1);
+                        }
                     }
-                } else if (event.getSpawnReason() != CreatureSpawnEvent.SpawnReason.CUSTOM) {
-                    for (int i = 1; i < Speed.get(1); i++) {
+                } else if (event.getSpawnReason() != CreatureSpawnEvent.SpawnReason.CUSTOM)
+                    for (int i = 1; i < Speed.get(1); i++)
                         event.getLocation().getWorld().spawnEntity(event.getLocation(), entity.getType());
-                    }
-                    index = Speed.get(2);
-                }
             } else
                 return;
         }
