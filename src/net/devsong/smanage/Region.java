@@ -13,7 +13,7 @@ public class Region implements ConfigurationSerializable {
     private final String time;
     private boolean aniMode = true;
     private boolean monMode = true;
-    private boolean universal = false;
+    private SUniversal universal = SUniversal.COMMON;
     private String modifier;
     private String modifyTime;
     private SLocation ALocation, BLocation;
@@ -56,12 +56,12 @@ public class Region implements ConfigurationSerializable {
         return this;
     }
 
-    public boolean getUniversal() {
+    public SUniversal getUniversal() {
         return universal;
     }
 
-    public Region setUniversal(boolean universal) {
-        this.universal = universal;
+    public Region setUniversal(String universal) {
+        this.universal = SUniversal.getInstance(universal);
         return this;
     }
 
@@ -108,7 +108,7 @@ public class Region implements ConfigurationSerializable {
         data.put("time", this.time);
         data.put("monMode", this.monMode);
         data.put("aniMode", this.aniMode);
-        data.put("universal", this.universal);
+        data.put("universal", this.universal.name());
         data.put("modifier", this.modifier);
         data.put("modifyTime", this.modifyTime);
         data.put("MonSpeed", this.MonSpeed);
@@ -120,7 +120,7 @@ public class Region implements ConfigurationSerializable {
 
     public static Region deserialize(Map<String, Object> args) {
         return new Region((String) args.get("name"), (String) args.get("player"), (String) args.get("time")).setMonMode((Boolean) args.get("monMode")).setAniMode((Boolean) args.get("aniMode"))
-                .setUniversal((Boolean) args.get("universal")).setMonSpeed((List<Integer>) args.get("MonSpeed")).setAniSpeed((List<Integer>) args.get("AniSpeed"))
+                .setUniversal((String) args.get("universal")).setMonSpeed((List<Integer>) args.get("MonSpeed")).setAniSpeed((List<Integer>) args.get("AniSpeed"))
                 .setALocation((SLocation) args.get("ALocation")).setBLocation((SLocation) args.get("BLocation"))
                 .setModifier((String) args.get("modifier")).setModifyTime((String) args.get("modifyTime"));
     }

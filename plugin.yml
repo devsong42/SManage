@@ -1,6 +1,6 @@
 name: SManage
 main: net.devsong.smanage.SManage
-version: 4.1
+version: 4.2
 author: Devsong
 load: STARTUP
 description: 区域管理生物生成

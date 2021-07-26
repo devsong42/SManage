@@ -47,9 +47,13 @@ public class SManage extends JavaPlugin {
             return true;
         } else if (args[0].trim().equalsIgnoreCase("reload")) {
             if (sender.hasPermission("smanage.edit")) {
-                this.getConfig().set("RegionList", RegionDB.Regions);
-                this.getConfig().set("Setter", SManageListener.item.name());
-                this.saveConfig();
+                if (args.length == 2)
+                    if (args[1].trim().equalsIgnoreCase("cover")) {
+                        this.getConfig().set("RegionList", RegionDB.Regions);
+                        this.getConfig().set("Setter", SManageListener.item.name());
+                        this.saveConfig();
+                    } else
+                        sender.sendMessage(ChatColor.RED + "未知参数! ");
                 reloadConfig();
                 ArrayList<Region> list = (ArrayList<Region>) getConfig().getList("RegionList");
                 String m = getConfig().getString("Setter", "APPLE");
@@ -217,18 +221,23 @@ public class SManage extends JavaPlugin {
         } else if (args[0].trim().equalsIgnoreCase("setUniversal")) {
             if (sender.hasPermission("smanage.edit")) {
                 if (args.length == 3 && !args[1].trim().equals("") && !args[2].trim().equals("")) {
-                    if (args[2].trim().equalsIgnoreCase("true"))
-                        if (RegionDB.setUniversal(true, args[1], sender.getName()))
+                    if (args[2].trim().equalsIgnoreCase("common"))
+                        if (RegionDB.setUniversal("COMMON", args[1], sender.getName()))
                             sender.sendMessage(ChatColor.YELLOW + "设置成功！");
                         else
                             sender.sendMessage(ChatColor.RED + "未找到该区域！");
-                    else if (args[2].trim().equalsIgnoreCase("false"))
-                        if (RegionDB.setUniversal(false, args[1], sender.getName()))
+                    else if (args[2].trim().equalsIgnoreCase("world"))
+                        if (RegionDB.setUniversal("WORLD", args[1], sender.getName()))
+                            sender.sendMessage(ChatColor.YELLOW + "设置成功！");
+                        else
+                            sender.sendMessage(ChatColor.RED + "未找到该区域！");
+                    else if (args[2].trim().equalsIgnoreCase("server"))
+                        if (RegionDB.setUniversal("SERVER", args[1], sender.getName()))
                             sender.sendMessage(ChatColor.YELLOW + "设置成功！");
                         else
                             sender.sendMessage(ChatColor.RED + "未找到该区域！");
                     else
-                        sender.sendMessage(ChatColor.RED + "请输入正确的通用性(true / false)！");
+                        sender.sendMessage(ChatColor.RED + "请输入正确的通用性(common / world / server)！");
                 } else
                     sender.sendMessage(ChatColor.RED + "请输入区域名或通用性！");
             } else
@@ -237,14 +246,17 @@ public class SManage extends JavaPlugin {
         } else if (args[0].trim().equalsIgnoreCase("setALLUniversal")) {
             if (sender.hasPermission("smanage.edit")) {
                 if (args.length == 2 && !args[1].trim().equals("")) {
-                    if (args[1].trim().equalsIgnoreCase("true")) {
+                    if (args[1].trim().equalsIgnoreCase("common")) {
                         sender.sendMessage(ChatColor.YELLOW + "设置成功！");
-                        RegionDB.setALLUniversal(true, sender.getName());
-                    } else if (args[1].trim().equalsIgnoreCase("false")) {
+                        RegionDB.setALLUniversal("COMMON", sender.getName());
+                    } else if (args[1].trim().equalsIgnoreCase("world")) {
                         sender.sendMessage(ChatColor.YELLOW + "设置成功！");
-                        RegionDB.setALLUniversal(false, sender.getName());
+                        RegionDB.setALLUniversal("WORLD", sender.getName());
+                    } else if (args[1].trim().equalsIgnoreCase("server")) {
+                        sender.sendMessage(ChatColor.YELLOW + "设置成功！");
+                        RegionDB.setALLUniversal("SERVER", sender.getName());
                     } else
-                        sender.sendMessage(ChatColor.RED + "请输入正确的通用性(true / false)！");
+                        sender.sendMessage(ChatColor.RED + "请输入正确的通用性(common / world / server)！");
                 } else
                     sender.sendMessage(ChatColor.RED + "请输入区域名或通用性！");
             } else
@@ -362,7 +374,7 @@ public class SManage extends JavaPlugin {
             if (sender.hasPermission("smanage.read")) {
                 sender.sendMessage(ChatColor.AQUA + "\n所有指令的介绍(忽略大小写, 前面均加sm)："
                         + "\n- help 获取帮助"
-                        + "\n- [OP] reload 存储区域至磁盘并重新加载"
+                        + "\n- [OP] reload 重新加载配置文件中的区域，若附加\"cover\"，将磁盘中已有的配置文件"
                         + "\n- [OP] set [NAME] 设置一个区域，若没有此区域将新建"
                         + "\n- [OP] save 保存已更改的区域"
                         + "\n- [OP] cancel 取消本次新建/修改区域"
@@ -396,7 +408,7 @@ public class SManage extends JavaPlugin {
         String[] subComsOP = {"reload", "set", "save", "cancel", "list", "detail", "remove", "setMonSpeed", "setALLMonSpeed", "set", "setAniSpeed", "setALLAniSpeed", "setUniversal", "setALLUniversal", "setter", "setMonMode", "setALLMonMode", "setAniMode", "setALLAniMode", "help"};
         String[] subComs = {"list", "detail", "help"};
         String[] modes = {"L", "A"};
-        String[] universal = {"true", "false"};
+        String[] universal = {"common", "world", "server"};
         if (sender.hasPermission("smanage.edit"))
             switch (args.length) {
                 case 1:
@@ -404,6 +416,8 @@ public class SManage extends JavaPlugin {
                 case 2:
                     if (args[0].trim().equalsIgnoreCase("set") || args[0].trim().equalsIgnoreCase("detail") || args[0].trim().equalsIgnoreCase("remove") || args[0].trim().equalsIgnoreCase("setMonSpeed") || args[0].trim().equalsIgnoreCase("setAniSpeed") || args[0].trim().equalsIgnoreCase("setMonMode") || args[0].trim().equalsIgnoreCase("setAniMode") || args[0].trim().equalsIgnoreCase("setUniversal"))
                         return Arrays.stream(RegionDB.getNames().toArray(new String[0])).filter(s -> s.contains(args[1])).collect(Collectors.toList());
+                    if (args[0].trim().equalsIgnoreCase("reload"))
+                        return Arrays.stream(new String[] {"cover"}).filter(s -> s.toLowerCase().contains(args[1].toLowerCase())).collect(Collectors.toList());
                     if (args[0].trim().equalsIgnoreCase("setALLMonMode") || args[0].trim().equalsIgnoreCase("setALLAniMode"))
                         return Arrays.stream(modes).filter(s -> s.toLowerCase().contains(args[1].toLowerCase())).collect(Collectors.toList());
                     if (args[0].trim().equalsIgnoreCase("setALLUniversal"))

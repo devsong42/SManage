@@ -90,7 +90,7 @@ public class RegionDB {
         }
     }
 
-    public static boolean setUniversal(boolean universal, String name, String player) {
+    public static boolean setUniversal(String universal, String name, String player) {
         Region re = getRegion(name);
         if (re != null) {
             re.setUniversal(universal).setModifier(player).setModifyTime(getTime());
@@ -99,7 +99,7 @@ public class RegionDB {
             return false;
     }
 
-    public static void setALLUniversal(boolean universal, String player) {
+    public static void setALLUniversal(String universal, String player) {
         for (Region region : Regions) {
             region.setUniversal(universal).setModifier(player).setModifyTime(getTime());
         }
@@ -165,10 +165,12 @@ public class RegionDB {
             if (region.getName().equals(name)) {
                 detail = "名称：" + region.getName() + "\n创建者： " + region.getPlayer() + "\n创建时间： " + region.getTime()
                         + "\n最近修改者： " + region.getModifier() + "\n最近修改时间： " + region.getModifyTime() + "\n世界： "
-                        + getWorld(region.getALocation().getWorld());
-                if (region.getUniversal())
-                    detail += "\n世界通用性：是";
-                else
+                        + getWorld(region.getALocation().getWorld()) + "通用性：" + switch (region.getUniversal()) {
+                    case COMMON -> "普通";
+                    case WORLD -> "世界";
+                    case SERVER -> "服务器";
+                };
+                if (region.getUniversal() == SUniversal.COMMON)
                     detail += "\nA点： X:" + region.getALocation().getX() + ", Y:"
                             + region.getALocation().getY() + ", Z:" + region.getALocation().getZ() + "\nB点： X:"
                             + region.getBLocation().getX() + ", Y:" + region.getBLocation().getY() + ", Z:"
@@ -202,12 +204,12 @@ public class RegionDB {
             for (Region region = Regions.get(index); index < getSize(); ) {
                 APoint = region.getALocation();
                 BPoint = region.getBLocation();
-                if (region.getUniversal() || (APoint.getX() <= location.getBlockX() && location.getBlockX() <= BPoint.getX())
+                if (region.getUniversal() == SUniversal.WORLD || region.getUniversal() == SUniversal.SERVER || (APoint.getX() <= location.getBlockX() && location.getBlockX() <= BPoint.getX())
                         || APoint.getX() >= location.getBlockX() && location.getBlockX() >= BPoint.getX())
-                    if (region.getUniversal() || location.getBlockY() > APoint.getY() || location.getBlockY() > BPoint.getY())
-                        if (region.getUniversal() || (APoint.getZ() <= location.getBlockZ() && location.getBlockZ() <= BPoint.getZ())
+                    if (region.getUniversal() == SUniversal.WORLD || region.getUniversal() == SUniversal.SERVER || location.getBlockY() > APoint.getY() || location.getBlockY() > BPoint.getY())
+                        if (region.getUniversal() == SUniversal.WORLD || region.getUniversal() == SUniversal.SERVER || (APoint.getZ() <= location.getBlockZ() && location.getBlockZ() <= BPoint.getZ())
                                 || APoint.getZ() >= location.getBlockZ() && location.getBlockZ() >= BPoint.getZ())
-                            if (Objects.requireNonNull(location.getWorld()).getName().equals(APoint.getWorld())) {
+                            if (region.getUniversal() == SUniversal.SERVER || Objects.requireNonNull(location.getWorld()).getName().equals(APoint.getWorld())) {
                                 if (flag ? region.getMonMode() : region.getAniMode()) {
                                     i1 = flag ? region.getMonSpeed() : region.getAniSpeed();
                                     i.add(i1.get(0));
