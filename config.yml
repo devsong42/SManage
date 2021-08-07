@@ -1,0 +1,26 @@
+# #号后的数字为对应的行
+# 19 你所使用的语言（简体中文为true，英语为false）
+# 20 默认划定区域时手持物品, 建议在游戏内使用指令修改
+# 21 创建区域时默认的怪物生成速度的管理模式, true为 L(限制), false为 A(加速)
+# 22 创建区域时默认的动物生成速度的管理模式, true为 L(限制), false为 A(加速)
+# 23 创建区域时默认的怪物生成速度：当模式为限制模式时，降到原速的x分之一（默认x=3），当x=1时，永不生成，x=0时，暂不限制；为加速模式时，加速到原速的x倍（默认3），x=0或1时，暂不加速
+# 24 创建区域时默认的动物生成速度：当模式为限制模式时，降到原速的x分之一（默认x=3），当x=1时，永不生成，x=0时，暂不限制；为加速模式时，加速到原速的x倍（默认3），x=0或1时，暂不加速
+# 25 创建区域时默认的通用性, common为普通(划定的区域的AB点XY内，较低点Y以上的范围内生效), world为区域所在世界生效, server为全服生效
+# 26 区域列表
+# The number after the # is the corresponding line
+# The language you use (Simplified Chinese is true and English is false)
+# 20 By default, the item on your hand when delimiting the region. It is recommended to use commands to modify it in the game
+# 21 The default management mode of monsters' spawning speed when creating a region. true is L (limit) and false is A (acceleration)
+# 22 The default management mode of animals' spawning speed when creating a region. true is L (limit) and false is A (acceleration)
+# 23 The default monsters' spawn speed when creating a region: when the mode is limited mode, it will be reduced to 1/x of the original speed (default x = 3), when x = 1, it will never be generated, and when x = 0, it will not be limited temporarily; When in acceleration mode, accelerate to x times the original speed (default 3). When x = 0 or 1, do not accelerate temporarily
+# 24 The default animals' spawn speed when creating a region: when the mode is limited mode, it will be reduced to 1/x of the original speed (default x = 3), when x = 1, it will never be generated, and when x = 0, it will not be limited temporarily; When in acceleration mode, accelerate to x times the original speed (default 3). When x = 0 or 1, do not accelerate temporarily
+# 25 When creating a region, the default universality. COMMON is common (within AB point' s XY of the delimited region and takes effect within the range above the lower point y), WORLD is the world where the region is located, and SERVER is entire server
+# 26 The list of the regions
+language: false
+Setter: APPLE
+defaultMonMode: true
+defaultAniMode: true
+defaultMonSpeed: 3
+defaultAniSpeed: 3
+defaultUniversal: COMMON
+RegionList: []

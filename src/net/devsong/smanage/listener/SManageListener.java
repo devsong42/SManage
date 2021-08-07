@@ -1,7 +1,6 @@
 package net.devsong.smanage.listener;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.logging.Logger;
 
 import net.devsong.smanage.SLocation;
@@ -48,7 +47,7 @@ public class SManageListener implements Listener {
                                     signA(player, pos);
                                     event.setCancelled(true);
                                 } else
-                                    player.sendMessage(ChatColor.RED + "请在同一个世界标记！");
+                                    player.sendMessage(ChatColor.RED + SManage.info.get("sign_err"));
                             } else {
                                 // 发送标记信息
                                 signA(player, pos);
@@ -69,7 +68,7 @@ public class SManageListener implements Listener {
                                     signB(player, pos);
                                     event.setCancelled(true);
                                 } else
-                                    player.sendMessage(ChatColor.RED + "请在同一个世界标记！");
+                                    player.sendMessage(ChatColor.RED + SManage.info.get("sign_err"));
                             } else {
                                 // 发送标记信息
                                 signB(player, pos);
@@ -85,23 +84,24 @@ public class SManageListener implements Listener {
     private void signA(Player player, Location pos) {
         int x = pos.getBlockX(), y = pos.getBlockY(), z = pos.getBlockZ();
         player.sendMessage(
-                org.bukkit.ChatColor.YELLOW + "[SManage] 标记A点: " + x + ", " + y + ", " + z);
+                org.bukkit.ChatColor.YELLOW + "[SManage] " + SManage.info.get("si_A") + x + ", " + y + ", " + z);
         SManage.regions.get(player.getName()).setALocation(new SLocation().setX(x).setY(y).setZ(z).setWorld(pos.getWorld().getName()));
-        log.info(player.getName() + " 标记A点 " + x + ", " + y + ", " + z + " 于世界 "
+        log.info(player.getName() + " " + SManage.info.get("si_A") + x + ", " + y + ", " + z + SManage.info.get("si_world")
                 + pos.getWorld().getName());
     }
 
     private void signB(Player player, Location pos) {
         int x = pos.getBlockX(), y = pos.getBlockY(), z = pos.getBlockZ();
         player.sendMessage(
-                org.bukkit.ChatColor.YELLOW + "[SManage] 标记B点: " + x + ", " + y + ", " + z);
+                org.bukkit.ChatColor.YELLOW + "[SManage] " + SManage.info.get("si_B") + x + ", " + y + ", " + z);
         SManage.regions.get(player.getName()).setBLocation(new SLocation().setX(x).setY(y).setZ(z).setWorld(pos.getWorld().getName()));
-        log.info(player.getName() + " 标记B点 " + x + ", " + y + ", " + z + " 于世界 "
+        log.info(player.getName() + " " + SManage.info.get("si_B") + x + ", " + y + ", " + z + SManage.info.get("si_world")
                 + pos.getWorld().getName());
     }
 
     private void manage(CreatureSpawnEvent event, Entity entity, boolean mode) {
         List<Integer> Speed;
+        int times = 1;
         for (int index = 0; index < RegionDB.getSize(); index++) {
             Speed = RegionDB.retrieval(event.getLocation(), mode, index);
             if (Speed != null) {
@@ -127,11 +127,11 @@ public class SManageListener implements Listener {
                         }
                     }
                 } else if (event.getSpawnReason() != CreatureSpawnEvent.SpawnReason.CUSTOM)
-                    for (int i = 1; i < Speed.get(1); i++)
-                        event.getLocation().getWorld().spawnEntity(event.getLocation(), entity.getType());
-            } else
-                return;
+                    times *= Speed.get(1);
+            }
         }
+        for (int i = 1; i < times; i++)
+            event.getLocation().getWorld().spawnEntity(event.getLocation(), entity.getType());
     }
 
     @EventHandler(ignoreCancelled = true)

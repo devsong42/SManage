@@ -7,6 +7,16 @@ import java.util.Map;
 
 public class SLocation implements ConfigurationSerializable {
     public int x, y, z;
+    public String world = "world";
+
+    public SLocation() {
+    }
+
+    public SLocation(int x, int y, int z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
 
     public int getX() {
         return x;
@@ -42,11 +52,6 @@ public class SLocation implements ConfigurationSerializable {
     public SLocation setWorld(String world) {
         this.world = world;
         return this;
-    }
-
-    public String world = "world";
-
-    public SLocation() {
     }
 
     @Override

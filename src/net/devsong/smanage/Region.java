@@ -6,9 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.jetbrains.annotations.NotNull;
 
 public class Region implements ConfigurationSerializable {
-    private final String name;
+    private String name;
     private final String player;
     private final String time;
     private boolean aniMode = true;
@@ -30,12 +31,34 @@ public class Region implements ConfigurationSerializable {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getPlayer() {
         return player;
     }
 
     public String getTime() {
         return time;
+    }
+
+    public String getModifier() {
+        return modifier;
+    }
+
+    public Region setModifier(String modifier) {
+        this.modifier = modifier;
+        return this;
+    }
+
+    public String getModifyTime() {
+        return modifyTime;
+    }
+
+    public Region setModifyTime(String modifyTime) {
+        this.modifyTime = modifyTime;
+        return this;
     }
 
     public boolean getAniMode() {
@@ -101,7 +124,7 @@ public class Region implements ConfigurationSerializable {
         return BLocation;
     }
 
-    public Map<String, Object> serialize() {
+    public @NotNull Map<String, Object> serialize() {
         Map<String, Object> data = new HashMap<>();
         data.put("name", this.name);
         data.put("player", this.player);
@@ -118,28 +141,27 @@ public class Region implements ConfigurationSerializable {
         return data;
     }
 
+    private static Object Get(Map<String, Object> args, String key) {
+        Map<String, Object> values = new HashMap<>();
+        values.put("name", "unknown");
+        values.put("player", "unknown");
+        values.put("time", "unknown");
+        values.put("monMode", RegionDB.defaultMonMode);
+        values.put("aniMode", RegionDB.defaultAniMode);
+        values.put("universal", RegionDB.defaultUniversal);
+        values.put("modifier", "unknown");
+        values.put("modifyTime", "unknown");
+        values.put("MonSpeed", RegionDB.defaultMonSpeed);
+        values.put("AniSpeed", RegionDB.defaultAniSpeed);
+        values.put("ALocation", new SLocation(0, 0, 0));
+        values.put("BLocation", new SLocation(0, 0, 0));
+        return args.get(key) == null ? values.get(key) : args.get(key);
+    }
+
     public static Region deserialize(Map<String, Object> args) {
-        return new Region((String) args.get("name"), (String) args.get("player"), (String) args.get("time")).setMonMode((Boolean) args.get("monMode")).setAniMode((Boolean) args.get("aniMode"))
-                .setUniversal((String) args.get("universal")).setMonSpeed((List<Integer>) args.get("MonSpeed")).setAniSpeed((List<Integer>) args.get("AniSpeed"))
-                .setALocation((SLocation) args.get("ALocation")).setBLocation((SLocation) args.get("BLocation"))
-                .setModifier((String) args.get("modifier")).setModifyTime((String) args.get("modifyTime"));
-    }
-
-    public String getModifier() {
-        return modifier;
-    }
-
-    public Region setModifier(String modifier) {
-        this.modifier = modifier;
-        return this;
-    }
-
-    public String getModifyTime() {
-        return modifyTime;
-    }
-
-    public Region setModifyTime(String modifyTime) {
-        this.modifyTime = modifyTime;
-        return this;
+        return new Region((String) Get(args, "name"), (String) Get(args, "player"), (String) Get(args, "time")).setMonMode((Boolean) Get(args, "monMode")).setAniMode((Boolean) Get(args, "aniMode"))
+                .setUniversal((String) Get(args, "universal")).setMonSpeed((List<Integer>) Get(args, "MonSpeed")).setAniSpeed((List<Integer>) Get(args, "AniSpeed"))
+                .setALocation((SLocation) Get(args, "ALocation")).setBLocation((SLocation) Get(args, "BLocation"))
+                .setModifier((String) Get(args, "modifier")).setModifyTime((String) Get(args, "modifyTime"));
     }
 }

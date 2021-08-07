@@ -7,18 +7,23 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+import net.devsong.smanage.language.SLanguages;
 import net.devsong.smanage.listener.SManageListener;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.plugin.java.JavaPlugin;
 
 public class RegionDB {
-    public static ArrayList<Region> Regions;
+    public static List<Region> Regions;
+    public static boolean defaultMonMode = true;
+    public static boolean defaultAniMode = true;
+    public static int defaultMonSpeed = 3;
+    public static int defaultAniSpeed = 3;
+    public static String defaultUniversal = "COMMON";
 
     private RegionDB() {
     }
 
-    public static void Load(ArrayList<Region> list, Material material) {
+    public static void Load(List<Region> list, Material material) {
         Regions = list;
         SManageListener.item = material;
     }
@@ -39,8 +44,7 @@ public class RegionDB {
         boolean flag;
         if (re == null) {
             Regions.add(region);
-            region.setModifier(player);
-            region.setModifyTime(getTime());
+            region.setMonMode(defaultMonMode).setAniMode(defaultAniMode).setMonSpeed(Arrays.asList(1, defaultMonSpeed)).setAniSpeed(Arrays.asList(1, defaultAniSpeed)).setUniversal(defaultUniversal).setModifier(player).setModifyTime(getTime());
             flag = true;
         } else {
             re.setALocation(region.getALocation()).setBLocation(region.getBLocation());
@@ -55,6 +59,15 @@ public class RegionDB {
         for (Region region : Regions)
             if (region.getName().equals(name)) {
                 Regions.remove(region);
+                return true;
+            }
+        return false;
+    }
+
+    public static boolean rename(String name, String name_later) {
+        for (Region region : Regions)
+            if (region.getName().equals(name)) {
+                region.setName(name_later);
                 return true;
             }
         return false;
@@ -163,20 +176,20 @@ public class RegionDB {
         String detail;
         for (Region region : Regions) {
             if (region.getName().equals(name)) {
-                detail = "名称：" + region.getName() + "\n创建者： " + region.getPlayer() + "\n创建时间： " + region.getTime()
-                        + "\n最近修改者： " + region.getModifier() + "\n最近修改时间： " + region.getModifyTime() + "\n世界： "
-                        + getWorld(region.getALocation().getWorld()) + "通用性：" + switch (region.getUniversal()) {
-                    case COMMON -> "普通";
-                    case WORLD -> "世界";
-                    case SERVER -> "服务器";
+                detail = SManage.info.get("d_name") + region.getName() + SManage.info.get("d_player") + region.getPlayer() + SManage.info.get("d_time") + region.getTime()
+                        + SManage.info.get("d_modifier") + region.getModifier() + SManage.info.get("d_modifyTime") + region.getModifyTime() + SManage.info.get("d_world")
+                        + getWorld(region.getALocation().getWorld()) + SManage.info.get("d_universal") + switch (region.getUniversal()) {
+                    case COMMON -> SManage.info.get("ws_uni_common");
+                    case WORLD -> SManage.info.get("ws_uni_world");
+                    case SERVER -> SManage.info.get("ws_uni_server");
                 };
                 if (region.getUniversal() == SUniversal.COMMON)
-                    detail += "\nA点： X:" + region.getALocation().getX() + ", Y:"
-                            + region.getALocation().getY() + ", Z:" + region.getALocation().getZ() + "\nB点： X:"
-                            + region.getBLocation().getX() + ", Y:" + region.getBLocation().getY() + ", Z:"
+                    detail += SManage.info.get("d_A") + " X: " + region.getALocation().getX() + ", Y: "
+                            + region.getALocation().getY() + ", Z: " + region.getALocation().getZ() + SManage.info.get("d_B") + " X: "
+                            + region.getBLocation().getX() + ", Y: " + region.getBLocation().getY() + ", Z: "
                             + region.getBLocation().getZ();
-                detail += "\n怪物生成速度：" + getSpeed(region.getMonSpeed().get(1), region.getMonMode())
-                        + "\n动物生成速度：" + getSpeed(region.getAniSpeed().get(1), region.getAniMode());
+                detail += SManage.info.get("d_mon") + getSpeed(region.getMonSpeed().get(1), region.getMonMode())
+                        + SManage.info.get("d_ani") + getSpeed(region.getAniSpeed().get(1), region.getAniMode());
                 return detail;
             }
         }
@@ -204,10 +217,10 @@ public class RegionDB {
             for (Region region = Regions.get(index); index < getSize(); ) {
                 APoint = region.getALocation();
                 BPoint = region.getBLocation();
-                if (region.getUniversal() == SUniversal.WORLD || region.getUniversal() == SUniversal.SERVER || (APoint.getX() <= location.getBlockX() && location.getBlockX() <= BPoint.getX())
+                if (region.getUniversal() == SUniversal.SERVER || region.getUniversal() == SUniversal.WORLD || (APoint.getX() <= location.getBlockX() && location.getBlockX() <= BPoint.getX())
                         || APoint.getX() >= location.getBlockX() && location.getBlockX() >= BPoint.getX())
-                    if (region.getUniversal() == SUniversal.WORLD || region.getUniversal() == SUniversal.SERVER || location.getBlockY() > APoint.getY() || location.getBlockY() > BPoint.getY())
-                        if (region.getUniversal() == SUniversal.WORLD || region.getUniversal() == SUniversal.SERVER || (APoint.getZ() <= location.getBlockZ() && location.getBlockZ() <= BPoint.getZ())
+                    if (region.getUniversal() == SUniversal.SERVER || region.getUniversal() == SUniversal.WORLD || location.getBlockY() > APoint.getY() || location.getBlockY() > BPoint.getY())
+                        if (region.getUniversal() == SUniversal.SERVER || region.getUniversal() == SUniversal.WORLD || (APoint.getZ() <= location.getBlockZ() && location.getBlockZ() <= BPoint.getZ())
                                 || APoint.getZ() >= location.getBlockZ() && location.getBlockZ() >= BPoint.getZ())
                             if (region.getUniversal() == SUniversal.SERVER || Objects.requireNonNull(location.getWorld()).getName().equals(APoint.getWorld())) {
                                 if (flag ? region.getMonMode() : region.getAniMode()) {
@@ -234,21 +247,22 @@ public class RegionDB {
 
     private static String getWorld(String name) {
         return switch (name) {
-            case "world" -> "主世界";
-            case "world_the_end" -> "末影之地";
-            case "world_nether" -> "下界地狱";
+            case "world" -> SManage.info.get("ws_world");
+            case "world_the_end" -> SManage.info.get("ws_end");
+            case "world_nether" -> SManage.info.get("ws_nether");
             default -> name;
         };
     }
 
     private static String getSpeed(int i, boolean flag) {
+        if (i < 0) i = 0;
         return flag ? switch (i) {
-            case 0 -> "暂不限制";
-            case 1 -> "永不生成";
-            default -> "原速度的1/" + i;
+            case 0 -> SManage.info.get("ws_noLi");
+            case 1 -> SManage.info.get("ws_noSp");
+            default -> SManage.info.lang ? SManage.info.get("ws_li") + i : "1 / " + i + SManage.info.get("ws_li");
         } : switch (i) {
-            case 0, 1 -> "暂不加速";
-            default -> "原速度的" + i + "倍";
+            case 0, 1 -> SManage.info.get("ws_noAc");
+            default -> SManage.info.lang ? SManage.info.get("ws_ac") + i + "倍" : i + SManage.info.get("ws_ac");
         };
     }
 
